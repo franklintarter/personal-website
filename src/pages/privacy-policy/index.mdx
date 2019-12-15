@@ -1,0 +1,94 @@
+---
+title: Privacy Policy
+description: Your privacy is important to us so we make it easy to understand when and how we collect information from our Site visitors.
+effectiveDate: 31 August, 2018
+pagePath: privacy-policy
+---
+
+<!-- TODO -->
+
+import { graphql } from "gatsby";
+import { Lead } from "../../components/Typography";
+
+# Privacy Policy
+
+<Lead>
+  Your online privacy is very important to us. Please take a moment to find out
+  how we collect and process our website visitor information and how we help you
+  protect your right to privacy.
+</Lead>
+
+## Why Is Privacy Important?
+
+When you browse the internet, and specifically this site, your information is gathered by services that are running behind the scenes. This page outlines which services we use and tells you about your choices and control where your privacy is concerned.
+
+## Definitions
+
+<p>
+  When we use the word <strong>Site</strong> we are referring to the direct
+  website pages of {props.data.globalContent.childMdx.frontmatter.siteNameShort}{" "}
+  only and not any subdomain or affiliated site.
+</p>
+
+When we refer to **you** we are addressing the reader of this Privacy Policy as a visitor of the Site.
+
+**Personal Data** refers to information about you that identifies you as an individual. This includes, but is not limited to, your name, email address, and phone number. We also use the word data to refer to all data, not necessarily personal, that we collect on our Site.
+
+## Information we show
+
+We will never show your personal information on this Site. Any customer testimonials we show now or in the future are shown only with explicit consent from the customer and anonymized, if they should request it, to protect their personal details.
+
+## Information we collect
+
+You do not have to give us any personal information to use this Site. We will never require your name, email, or any personally identifiable information in order to view the pages or content of this Site.
+
+We do collect information about our visitors' behavior on this Site, such as pages viewed, how long they are viewed, and other usage statistics that tell us where we might improve our Site content.
+
+If and when this Site presents a contact form, and you fill the form out with your Personal Data, you authorize the owners of this Site to use these details to reply to requests for information, quotes or any other kind of request as indicated by the form’s instructions. Personal Data collected may include email address, first name, last name and phone number.
+
+We will be transparent on our contact form about how your Personal Data is used before you submit the contact form and you may object to this usage by not submitting the form.
+
+## Services we use
+
+We use Google Analytics and Google Tag Manager to track visitor behavior. These services allow us to see which pages are useful and help us better understand our audience. If you do not wish to be tracked by Google Analytics, you may install a browser plugin which will prevent your data from being used by Google Analytics. Simply go to the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout) to install the plugin.
+
+We use Google Fonts, a service that embeds specific web fonts in our Site. This service collects usage data from visitors of the Site.
+
+Since we use Google's services, we encourage you to check out [Google's Privacy Policy](https://policies.google.com/privacy) to and learn about your privacy choices and control when browsing this site.
+
+## Changes to this Policy
+
+We may periodically make changes to this Privacy Policy. When we do this, we may not inform you directly, so it's good to visit this page on occasion to stay informed. We will always seek to be transparent about the information we collect from our visitors.
+
+### Effective Date
+
+<p>
+  This policy is effective as of {props.pageContext.frontmatter.effectiveDate}.
+</p>
+
+### Site Owners
+
+<p>
+  <strong>{props.data.globalContent.childMdx.frontmatter.businessName}</strong>{" "}
+  <br />
+  {props.data.globalContent.childMdx.frontmatter.streetAddress} <br />
+  {props.data.globalContent.childMdx.frontmatter.city},{" "}
+  {props.data.globalContent.childMdx.frontmatter.state}
+</p>
+
+export const pageQuery = graphql`
+  query {
+    globalContent: file(sourceInstanceName: { eq: "global" }) {
+      childMdx {
+        frontmatter {
+          businessName
+          city
+          zip
+          streetAddress
+          state
+          siteNameShort
+        }
+      }
+    }
+  }
+`;

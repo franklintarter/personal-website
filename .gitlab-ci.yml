@@ -1,0 +1,19 @@
+# TODO uncomment to allow Gitlab auto build/deploy to Firebase
+# image: node:12.13.1
+
+# before_script:
+#   - node -v
+#   - yarn install
+
+# stages:
+#   - production
+
+# production:
+#   type: deploy
+#   stage: production
+#   image: node:12.13.1
+#   only:
+#     - master
+#   script:
+#     - yarn build
+#     - node_modules/.bin/firebase deploy -P prod --token $FIREBASE_TOKEN_PROD
