@@ -1,1 +1,1 @@
-export { default as useGlobalContent } from "./useGlobalContent";
+export { default as useMetadata } from "./useMetadata";

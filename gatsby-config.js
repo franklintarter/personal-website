@@ -2,11 +2,11 @@ const path = require("path");
 
 module.exports = {
   siteMetadata: {
-    siteTitle: "Mortar Labs Starter",
-    siteUrl: "https://gatsby-starter-mortar-labs.franklintarter.now.sh", // TODO This should be the production site, generates the correct robots.txt, no trailing slash
-    title: "Mortar Labs Starter",
+    siteUrl: "https://franklintarter.com",
+    title: "Franklin Tarter",
     image: "/img/mark.png", // Path to your image you placed in the 'static' folder
-    description: "A Gatsby starter site"
+    description: "Franklin Tarter's personal website",
+    twitterUrl: "https://twitter.com/franklintarter"
   },
   plugins: [
     "gatsby-plugin-postcss",
@@ -23,8 +23,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "Site Name", // TODO
-        short_name: "Short Name", // TODO
+        name: "Franklin Tarter's Personal Website",
+        short_name: "Franklin Tarter's Website",
         start_url: "/",
         background_color: "#fff", // TODO ensure color works well as background for Mark Color
         theme_color: "#6b37bf", // TODO ensure color works well as background for Mark
@@ -39,7 +39,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-google-tagmanager",
       options: {
-        id: "YOUR_GOOGLE_TAGMANAGER_ID" // TODO
+        id: "GTM-KQG5W65"
       }
     },
     {
@@ -57,37 +57,11 @@ module.exports = {
       }
     },
     "gatsby-plugin-offline",
-    "gatsby-plugin-react-helmet",
     {
       resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/src/pages`,
-        ignore: [
-          `${__dirname}/src/pages/privacy-policy/index.mdx`,
-          `${__dirname}/src/pages/terms-of-use/index.mdx`
-        ],
         name: "pages"
-      }
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/src/pages/privacy-policy/index.mdx`,
-        name: "basic-pages"
-      }
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/src/content/global.mdx`,
-        name: "global"
-      }
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/src/pages/terms-of-use/index.mdx`,
-        name: "basic-pages"
       }
     },
     {
@@ -124,40 +98,35 @@ module.exports = {
       }
     },
     {
-      // TODO update
       resolve: "gatsby-plugin-seo",
       options: {
-        siteName: "Example Company",
+        siteName: "Franklin Tarter",
         defaultSiteImage: "/img/logo.png",
-        siteUrl: "https://example.com",
-        twitterCreator: "@twitterhandle",
-        twitterSite: "@twitterhandle",
+        siteUrl: "https://franklintarter.com",
+        twitterCreator: "@franklintarter",
+        twitterSite: "@franklintarter",
         globalSchema: `{
             "@type": "WebSite",
-            "@id": "https://example.com/#website",
-            "url": "https://example.com/",
-            "name": "Example Site Title",
-            "publisher": {
-              "@id": "https://example.com/about/#organization"
-            },
+            "@id": "https://franklintarter.com/#website",
+            "url": "https://franklintarter.com/",
+            "name": "Franklin Tarter's Personal Website",
             "image": {
               "@type": "ImageObject",
               "@id": "https://example.com/#logo",
               "url": "https://example.com/img/logo.png",
-              "caption": "Example Company Logo"
+              "caption": "Franklin Tarter Logo"
             }
           }`
       }
     },
     {
-      resolve: "gatsby-plugin-purgecss", // purges all unused/unreferenced css rules
+      resolve: "gatsby-plugin-purgecss",
       options: {
-        // develop: true, // Activates purging in npm run develop
         content: [
           path.join(process.cwd(), "src/**/!(*.d).{ts,js,jsx,tsx,md,mdx}")
         ],
         tailwind: true,
-        purgeOnly: ["src/styles/global.css"] // applies purging only on the bulma css file
+        purgeOnly: ["src/styles/global.css"]
       }
     } // must be after other CSS plugins
   ]

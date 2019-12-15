@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "gatsby";
 import Twitter from "../../img/svg/brands/twitter.svg";
-import Instagram from "../../img/svg/brands/instagram.svg";
 import { Section } from "../UI";
 
-import { useGlobalContent } from "../../hooks";
+import { useMetadata } from "../../hooks";
 
 export default () => {
-  const { siteName, twitterUrl, instagramUrl } = useGlobalContent();
+  const { siteName, twitterUrl } = useMetadata();
   const year = new Date().getFullYear();
   return (
     <footer className="bg-gray-900">
@@ -42,13 +41,6 @@ export default () => {
               href={twitterUrl}
             >
               <Twitter className="fill-current w-6 h-6" />
-            </a>
-            <a
-              title="Instagram"
-              className="p-2 text-center hover:cursor-pointer hover:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700 transition"
-              href={instagramUrl}
-            >
-              <Instagram className="fill-current w-6 h-6" />
             </a>
           </div>
         </div>
