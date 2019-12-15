@@ -14,7 +14,7 @@ module.exports = {
       screens: {},
       colors: {
         white: "#fefefe",
-        brand: "#ea3c24",
+        brand: "#1c00cf",
         "brand-darken": "#df2e15",
         body: "#040404"
       },
@@ -28,8 +28,8 @@ module.exports = {
     },
     // TODO customize
     fontFamily: {
-      body: ["Montserrat", "sans-serif"],
-      heading: ["Libre Baskerville", "serif"]
+      sans: ["Lato", "sans-serif"],
+      serif: ["Cardo", "serif"]
     }
   },
   variants: [

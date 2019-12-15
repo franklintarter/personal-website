@@ -5,7 +5,7 @@ import { Section } from "../UI";
 
 const NavLink = ({ to, className = "", children }) => (
   <Link
-    className={`py-2 px-2 uppercase tracking-wide border-b-2 border-transparent border-solid hover:border-brand transition ${className}`}
+    className={`uppercase font-bold text-brand hover:border-brand border-b-2 transition border-transparent ${className}`}
     to={to}
     activeClassName="border-brand"
   >
@@ -16,25 +16,21 @@ const NavLink = ({ to, className = "", children }) => (
 export default () => {
   return (
     <nav role="navigation" aria-label="main-navigation">
-      <Section>
-        <div className="flex justify-center content-center pt-2 pb-2 md:pb-4 flex-wrap xs:flex-no-wrap xs:justify-between items-center">
-          <div className="w-full xs:w-auto text-center">
-            <Link className="flex justify-center" to="/">
-              <Logo className="xs:w-16 w-12 h-auto xs:mr-6 pb-2 xs:pb-0" />
-            </Link>
-          </div>
-          <div className="flex justify-center xs:flex-grow-0 flex-grow">
-            <NavLink className="mr-4" to="/">
-              Home
-            </NavLink>
-            <NavLink className="mr-4" to="/about">
-              About
-            </NavLink>
-            <NavLink to="/contact">Contact</NavLink>
-            <NavLink to="/style-guide">Style GUide</NavLink>
-          </div>
+      <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center">
+        <div className="w-full xs:w-auto text-center">
+          <Link className="flex justify-center" to="/">
+            <div className="text-gray-700 tracking-wider uppercase">
+              Franklin Tarter
+            </div>
+          </Link>
         </div>
-      </Section>
+        <div className="flex justify-center xs:flex-grow-0 flex-grow">
+          <NavLink className="mr-4" to="/projects">
+            Projects
+          </NavLink>
+          <NavLink to="/writing">Writing</NavLink>
+        </div>
+      </div>
     </nav>
   );
 };
