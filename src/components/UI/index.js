@@ -4,3 +4,4 @@ export { default as Button } from "./Button";
 export { default as TextInput } from "./TextInput";
 export { default as TextArea } from "./TextArea";
 export { default as Profile } from "./Profile";
+export { default as Tolstoy } from "./Tolstoy";
