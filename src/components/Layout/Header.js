@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "gatsby";
-import Logo from "../../../static/img/logo.svg";
-import { Section } from "../UI";
 
 const NavLink = ({ to, className = "", children }) => (
   <Link
@@ -16,7 +14,7 @@ const NavLink = ({ to, className = "", children }) => (
 export default () => {
   return (
     <nav role="navigation" aria-label="main-navigation">
-      <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center">
+      <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center sm:mb-20 mb-12">
         <div className="w-full xs:w-auto text-center">
           <Link className="flex justify-center" to="/">
             <div className="text-gray-700 tracking-wider uppercase">

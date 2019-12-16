@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SEO, useSEO } from "gatsby-plugin-seo";
-
-import { Hero } from "../components/Pages/Home";
-import { Section } from "../components/UI";
-import { H1, Lead, H3 } from "../components/Typography";
+import Prism from "prismjs";
 import Layout from "../components/Layout";
 
 const title = "Home";
-const description = "This is the description of the page.";
-const subheading = "This is the punchy subheading.";
-const heroTitle = "This is a hero title.";
-const heroSubtext = "This is the hero subtext.";
+const lead = "Software development is not writing instructions for computers.";
 
 export default () => {
   const { siteUrl } = useSEO();
+  useEffect(() => {
+    // call the highlightAll() function to style our code blocks
+    Prism.highlightAll();
+  });
+  const code = `
+softwareDevelopment.includes(writingInstructionsForComputuers);
+softwareDevelopment !== writingInstructionsForComputers;
+  `;
   return (
     <Layout>
       <SEO
         title={title}
-        description={description}
+        description={lead}
         pagePath="/about"
         schema={`{
               "@context": "http://schema.org",
@@ -30,17 +32,11 @@ export default () => {
               }
             }`}
       />
-      <Section>
-        <H1>Headline</H1>
-        <Lead>{subheading}</Lead>
-      </Section>
-
-      <Hero heroTitle={heroTitle} heroSubtext={heroSubtext} />
-
-      <Section className="py-12">
-        <H3>I resolve to the H3 Component</H3>
-        <p>{description}</p>
-      </Section>
+      {/* <h1 className="mb-2 text-3xl font-serif">What Will We Build?</h1> */}
+      <p className="text-lg text-gray-800 tracking-wide font-light">{lead}</p>
+      <pre>
+        <code className="language-javascript">{code}</code>
+      </pre>
     </Layout>
   );
 };

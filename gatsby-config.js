@@ -17,7 +17,8 @@ module.exports = {
         defaultLayouts: {
           default: require.resolve("./src/templates/page-default.js"),
           "basic-pages": require.resolve("./src/templates/page-basic.js")
-        }
+        },
+        gatsbyRemarkPlugins: ["gatsby-remark-prismjs"]
       }
     },
     {
