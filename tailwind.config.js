@@ -29,7 +29,8 @@ module.exports = {
     // TODO customize
     fontFamily: {
       sans: ["Lato", "sans-serif"],
-      serif: ["Cardo", "serif"]
+      serif: ["Cardo", "serif"],
+      oswald: ["Oswald", "serif"]
     }
   },
   variants: [

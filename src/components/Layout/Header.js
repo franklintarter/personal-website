@@ -17,9 +17,7 @@ export default () => {
       <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center sm:mb-20 mb-12">
         <div className="w-full xs:w-auto text-center">
           <Link className="flex justify-center" to="/">
-            <div className="text-gray-700 tracking-wider uppercase">
-              Franklin Tarter
-            </div>
+            <div className="text-gray-700 tracking-wider uppercase">FT</div>
           </Link>
         </div>
         <div className="flex justify-center xs:flex-grow-0 flex-grow">

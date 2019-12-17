@@ -69,6 +69,7 @@
     "tailwindcss-overload": "^0.0.3",
     "typeface-cardo": "^0.0.72",
     "typeface-lato": "^0.0.75",
+    "typeface-oswald": "^0.0.75",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
