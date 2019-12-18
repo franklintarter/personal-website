@@ -7,6 +7,8 @@ export default () => {
         site {
           siteMetadata {
             twitterUrl
+            linkedInUrl
+            githubUrl
           }
         }
       }

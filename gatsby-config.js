@@ -6,7 +6,9 @@ module.exports = {
     title: "Franklin Tarter",
     image: "/img/mark.png", // Path to your image you placed in the 'static' folder
     description: "Franklin Tarter's personal website",
-    twitterUrl: "https://twitter.com/franklintarter"
+    twitterUrl: "https://twitter.com/franklintarter",
+    linkedInUrl: "https://www.linkedin.com/in/franklintarter",
+    githubUrl: "https://github.com/franklintarter"
   },
   plugins: [
     "gatsby-plugin-postcss",

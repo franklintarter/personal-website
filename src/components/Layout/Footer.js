@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "gatsby";
 import Twitter from "../../img/svg/brands/twitter.svg";
+import LinkedIn from "../../img/svg/brands/linkedin-in.svg";
+import Github from "../../img/svg/brands/github.svg";
 import { Section } from "../UI";
 
 import { useMetadata } from "../../hooks";
 
 export default () => {
-  const { twitterUrl } = useMetadata();
+  const { twitterUrl, linkedInUrl, githubUrl } = useMetadata();
   return (
     <footer className="border-t border-gray-400">
       <Section>
@@ -17,24 +19,24 @@ export default () => {
             </p>
             <a
               title="Twitter"
-              className="mr-4 p-2 text-center hover:cursor-pointer text-white bg-gray-800 hover:text-gray-300 text-gray-400 hover:bg-gray-700 transition"
+              className="mr-4 p-2 text-center hover:cursor-pointer bg-gray-200 hover:text-gray-800 text-gray-700 hover:bg-gray-300 transition"
               href={twitterUrl}
             >
               <Twitter className="fill-current w-6 h-6" />
             </a>
             <a
               title="Twitter"
-              className="mr-4 p-2 text-center hover:cursor-pointer text-white bg-gray-800 hover:text-gray-300 text-gray-400 hover:bg-gray-700 transition"
-              href={twitterUrl}
+              className="mr-4 p-2 text-center hover:cursor-pointer bg-gray-200 hover:text-gray-800 text-gray-700 hover:bg-gray-300 transition"
+              href={githubUrl}
             >
-              <Twitter className="fill-current w-6 h-6" />
+              <Github className="fill-current w-6 h-6" />
             </a>
             <a
               title="Twitter"
-              className="mr-4 p-2 text-center hover:cursor-pointer text-white bg-gray-800 hover:text-gray-300 text-gray-400 hover:bg-gray-700 transition"
-              href={twitterUrl}
+              className="mr-4 p-2 text-center hover:cursor-pointer bg-gray-200 hover:text-gray-800 text-gray-700 hover:bg-gray-300 transition"
+              href={linkedInUrl}
             >
-              <Twitter className="fill-current w-6 h-6" />
+              <LinkedIn className="fill-current w-6 h-6" />
             </a>
           </div>
         </div>
