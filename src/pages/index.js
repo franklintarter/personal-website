@@ -9,7 +9,7 @@ import { MemeQuote } from "../components/UI";
 const ArticlePreview = ({ title, description, slug, tags }) => {
   console.log(tags);
   const tagEls = tags.map(t => (
-    <div className="bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block">
+    <div className="hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block">
       {t}
     </div>
   ));
