@@ -16,6 +16,8 @@ module.exports = {
         white: "#fefefe",
         brand: "#1c00cf",
         "brand-darken": "#df2e15",
+        "brand-gray": "#48426b",
+        "brand-light-gray": "#988cdc",
         body: "#040404"
       },
       spacing: {
@@ -29,7 +31,7 @@ module.exports = {
     // TODO customize
     fontFamily: {
       sans: ["Lato", "sans-serif"],
-      serif: ["Cardo", "serif"],
+      serif: ["Crimson Text", "serif"],
       oswald: ["Oswald", "serif"]
     }
   },

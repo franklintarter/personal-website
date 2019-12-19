@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 
 const NavLink = ({ to, className = "", children }) => (
   <Link
-    className={`uppercase font-bold text-brand hover:border-brand border-b-2 transition border-transparent ${className}`}
+    className={`uppercase font-bold text-gray-700 hover:border-brand-light-gray border-b-2 transition border-transparent ${className}`}
     to={to}
     activeClassName="border-brand"
   >

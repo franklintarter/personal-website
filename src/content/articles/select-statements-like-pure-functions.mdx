@@ -1,0 +1,46 @@
+---
+title: Select Statements Like Pure Functions
+description: Concepts from a pure JavaScript function can map to a SQL statement. SELECT is like RETURN, etc..
+tags:
+  - SQL
+---
+
+Analogies are not perfectly accurate but they are perfectly useful. This is a pure function in JavaScript.
+
+```js
+function select(donuts) { // Take an array of donuts
+
+    // Filter donuts into a new array based on the value of the price property
+    const filteredDonuts = donuts.filter(d => d.price > 10)
+
+    // Return another array of objects that only include the name and price
+    return donuts.map(d => ({
+        name: d.name,
+        price: d.price
+    })
+}
+```
+
+This is a SQL select statement.
+
+```sql
+    SELECT -- Return a result-set that only includes name and price
+    	Donuts.Name
+    	, Donuts.Price
+
+    FROM -- Take the donuts table
+    	Donuts
+
+    WHERE -- Filter the donuts based on the value of the price column
+    	Donuts.Price > 10
+```
+
+All of the concepts from the JavaScript function map to this SQL statement. The syntax just switches the orders around.
+
+SELECT is like RETURN.
+
+FROM is like the INPUT.
+
+WHERE is like the FILTER in the function body.
+
+As we learn more we'll see that it doesn't always make sense to find an analogy from SQL to a non-database language. But we'll take the head start where we can.

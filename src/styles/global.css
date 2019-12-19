@@ -14,10 +14,6 @@ body > div > div {
   height: 100%;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
   font-family: "lato", open-sans;
 }
@@ -52,3 +48,11 @@ body > div > div {
   color: rgb(187, 181, 181);
   font-size: 3em;
 }
+
+.foo {
+  color: #6557b5;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

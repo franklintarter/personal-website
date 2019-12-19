@@ -11,6 +11,13 @@ module.exports = {
     githubUrl: "https://github.com/franklintarter"
   },
   plugins: [
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/src/content/articles`,
+        name: "articles"
+      }
+    },
     "gatsby-plugin-postcss",
     {
       resolve: `gatsby-plugin-mdx`,

@@ -16708,6 +16708,11 @@ typeface-cardo@^0.0.72:
   resolved "https://registry.yarnpkg.com/typeface-cardo/-/typeface-cardo-0.0.72.tgz#69939cba8d5acc0daa3d6d0777598c2e509d2c44"
   integrity sha512-U+4uLllKhu9cUvys2hocxawcik52uaDi3BkwyYN6n5e4OGWw3QQlqdbosvp+szfJw8A/8qYOB+ZwDsJR32RnnA==
 
+typeface-crimson-text@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-crimson-text/-/typeface-crimson-text-0.0.72.tgz#af492f355f1474ec185bebebf4b2aaaae6eec24d"
+  integrity sha512-CLDNCOJ05k1BIbgQ1eAPPaK4eVHls8Y+n5NTIwvlFmhCSLzCXWII4vQ2oV6Iyi3BOVogj/LsWq25IdQINrh5+Q==
+
 typeface-lato@^0.0.75:
   version "0.0.75"
   resolved "https://registry.yarnpkg.com/typeface-lato/-/typeface-lato-0.0.75.tgz#8aa11c5611dc38416837c089b265a2abd1f7dd31"

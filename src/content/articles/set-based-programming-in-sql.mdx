@@ -1,0 +1,80 @@
+---
+title: Set-based Programming in SQL
+description: SQL works better when you write what rather than how. Describe the data you want. Let the engine decide how to get it.
+tags:
+  - SQL
+---
+
+TLDR - Set-based programming is specifying what rather than how.
+
+If that doesn't immediately resonate, continue and we will tie the concept of set-based programming to some familiar programming ideas.
+
+## Letting Go of Control Flow
+
+Let's compare the functional style and the procedural style of some code that filters a list.
+
+```js
+// procedural
+const filteredItems = [];
+for (let i = 0; i < items.length; i++) {
+  if (items[i].price < 5) {
+    break;
+  }
+  filteredItems.push(items[i]);
+}
+```
+
+In the procedural style, you must specify so much:
+
+- Start at the beginning of the list `let i = 0`
+- Go through all the items `i < items.length`
+- Do not skip any items `i++`
+- Break when the filtering condition is met `if (items[i].price < 5) { break; }`
+- Push the current item into an array variable that you set up earlier `filteredItems.push(items[i])`
+
+So much noise when the point is to filter one condition.
+
+And now functional.
+
+```js
+// functional
+const filteredItems = items.filter(item => item.price < 5);
+```
+
+It's a one-liner and that's nice. But the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. Good SQL follows the same path.
+
+## SQL - What, Not How
+
+In SQL we don't have to specify how the engine should do things. We just need to tell it what to do. Control flow concepts like `if, else, break, for` are antithetical to SQL.
+
+If you solve SQL problems with control flow the code becomes difficult to read and it will not scale. It will burn CPU cycles and hog memory. You are hammering in a screw.
+
+That's the core of set-based programming - what, not how. Describe the data you want, let the SQL engine decide how to get it.
+
+## Is Control Flow a Thing in SQL?
+
+Yes, here are some of the keywords:
+
+- BREAK
+- CONTINUE
+- GOTO label (no)
+- WHILE
+- Cursors - OPEN, FETCH, CLOSE
+
+Don't learn how to do anything with these. You wouldn't disable garbage collection on a new project built with a modern language, would you? Then don't write procedural SQL!
+
+Oddly enough, a project I'd worked on with crazy amounts of procedural SQL also had the garbage collection disabled in the C# part of the app!
+
+You might learn the procedural syntax in SQL to understand how to get rid of it in a codebase you've inherited. Cross that bridge when you get there.
+
+## The Beautiful Parts of SQL
+
+By removing control flow we're left with a fun and useful subset of the language.
+
+- SELECT, INSERT, UPDATE, DELETE
+- Aggregate Functions
+- GROUP BY, SORT
+- JOINs
+- CTEs
+
+If you learn these well, you will write sound, clear SQL. You won't be pigeonholed when you need to squeeze out more performance.
