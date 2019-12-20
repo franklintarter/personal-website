@@ -10,6 +10,7 @@ import HeroSubtitle from "./HeroSubtitle";
 import UL from "./UL";
 import LI from "./LI";
 import BlockQuote from "./BlockQuote";
+import InlineCode from "./InlineCode";
 
 const MdxComponentMap = {
   h1: H1,
@@ -20,6 +21,7 @@ const MdxComponentMap = {
   a: A,
   ul: UL,
   li: LI,
+  inlineCode: InlineCode,
   blockquote: BlockQuote
 };
 
@@ -36,5 +38,6 @@ export {
   A,
   UL,
   LI,
-  BlockQuote
+  BlockQuote,
+  InlineCode
 };
