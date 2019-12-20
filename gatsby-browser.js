@@ -5,3 +5,4 @@ import "typeface-lato";
 import "typeface-cardo";
 import "typeface-oswald";
 import "typeface-crimson-text";
+import "typeface-nunito-sans";

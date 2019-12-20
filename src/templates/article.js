@@ -15,8 +15,10 @@ export default ({ data }) => {
   } = data;
   return (
     <Layout>
-      <h1>{frontmatter.title}</h1>
-      <p>{name}</p>
+      <h1 className="font-oswald text-gray-900 text-4xl font-medium uppercase leading-tight mb-4">
+        {frontmatter.title}
+      </h1>
+      {/* <p>{name}</p> */}
       <MDXProvider components={MdxComponentMap}>
         <MDXRenderer>{body}</MDXRenderer>
       </MDXProvider>

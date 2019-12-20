@@ -1,11 +1,3 @@
-/* Max Height to all wrappers */
-html,
-body,
-body > div,
-body > div > div {
-  height: 100%;
-}
-
 #___gatsby {
   height: 100%;
 }
@@ -14,9 +6,9 @@ body > div > div {
   height: 100%;
 }
 
-* {
-  font-family: "lato", open-sans;
-}
+/* * {
+  font-family: "Nunito Sans", open-sans;
+} */
 
 .quotation {
   /* font-size: 30px; */
@@ -49,10 +41,19 @@ body > div > div {
   font-size: 3em;
 }
 
-.foo {
+/* .foo {
   color: #6557b5;
-}
+} */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Max Height to all wrappers */
+html,
+body,
+body > div,
+body > div > div {
+  height: 100%;
+  font-family: "Nunito Sans", open-sans;
+}

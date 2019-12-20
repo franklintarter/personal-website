@@ -14,10 +14,11 @@ module.exports = {
       screens: {},
       colors: {
         white: "#fefefe",
-        brand: "#1c00cf",
+        brand: "#4a36be",
         "brand-darken": "#df2e15",
         "brand-gray": "#48426b",
         "brand-light-gray": "#988cdc",
+        "brand-light": "#9f97d1",
         body: "#040404"
       },
       spacing: {
@@ -30,7 +31,7 @@ module.exports = {
     },
     // TODO customize
     fontFamily: {
-      sans: ["Lato", "sans-serif"],
+      sans: ["Nunito Sans", "sans-serif"],
       serif: ["Crimson Text", "serif"],
       oswald: ["Oswald", "serif"]
     }

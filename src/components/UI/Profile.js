@@ -19,7 +19,7 @@ const Image = () => {
     <div>
       <Img
         fluid={data.placeholderImage.childImageSharp.fluid}
-        className="w-32 shadow-xl"
+        className="w-20 shadow-xl rounded-full"
       />
     </div>
   );

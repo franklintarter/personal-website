@@ -5,6 +5,7 @@ const Component = ({ children, ...rest }) => {
   return <h3 {...rest}>{children}</h3>;
 };
 
-Component.defaultClassName = "text-2xl text-body font-body font-semibold mb-4";
+Component.defaultClassName =
+  "text-2xl text-gray-900 font-semibold font-serif font-semibold mb-4";
 
 export default withTailwindOverload(Component);

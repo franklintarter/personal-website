@@ -137,10 +137,12 @@ pre[class*="language-"] {
   overflow-x: auto;
   color: rgb(34, 43, 43);
   background: #f4f4f7;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
 }
 
 code[class*="language-"] {
-  padding: 1.45rem;
+  padding: 1.5rem 1rem;
 }
 
 pre[class*="language-"]::-moz-selection,
@@ -161,6 +163,9 @@ code[class*="language-"] ::selection {
 pre[class*="language-"] {
   overflow: auto;
   background-color: white;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-bottom: 1.5rem;
 }
 
 :not(pre) > code[class*="language-"],

@@ -10,6 +10,6 @@ const Component = ({ children, ...rest }) => {
 };
 
 Component.defaultClassName =
-  "underline text-gray-600 transition text-brand font-body hover:text-brand-darken";
+  "underline transition text-gray-800 hover:text-brand leading-none";
 
 export default withTailwindOverload(Component);
