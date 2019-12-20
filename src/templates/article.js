@@ -15,7 +15,7 @@ export default ({ data }) => {
   } = data;
   return (
     <Layout>
-      <h1 className="font-oswald text-gray-900 text-4xl font-medium uppercase leading-tight mb-4">
+      <h1 className="font-oswald text-gray-900 text-4xl font-medium uppercase leading-tight mb-8">
         {frontmatter.title}
       </h1>
       {/* <p>{name}</p> */}

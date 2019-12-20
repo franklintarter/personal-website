@@ -5,6 +5,6 @@ const Component = ({ children, ...rest }) => {
   return <li {...rest}>{children}</li>;
 };
 
-Component.defaultClassName = "list-disc list-outside pb-2";
+Component.defaultClassName = "list-disc list-outside mt-2";
 
 export default withTailwindOverload(Component);
