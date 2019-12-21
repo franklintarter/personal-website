@@ -5,13 +5,13 @@ tags:
   - SQL
 ---
 
-TLDR - Set-based programming is specifying what rather than how.
+TLDR - Set-based programming is specifying `what` rather than `how`.
 
 If that doesn't immediately resonate, continue and we will tie the concept of set-based programming to some familiar programming ideas.
 
 ## Let Go of Control Flow
 
-Let's compare the functional style and the procedural style of some code that filters a list.
+Let's compare the functional style and the procedural style of filtering items.
 
 ```js
 // procedural
@@ -24,7 +24,7 @@ for (let i = 0; i < items.length; i++) {
 }
 ```
 
-In the procedural style, you must specify so much:
+You must specify so many things:
 
 - Start at the beginning of the list `let i = 0`
 - Go through all the items `i < items.length`
@@ -45,11 +45,9 @@ It's a one-liner and that's nice. But the real benefit is the signal to noise ra
 
 ## SQL - What, Not How
 
-In SQL we don't have to specify how the engine should do things. We just need to tell it what to do. Control flow concepts like `if, else, break, for` are antithetical to SQL.
+In SQL we don't have to specify how the engine should do things. We just need to tell it what to do. Control flow concepts like `if, else, break, for` are antithetical to set-based SQL.
 
 If you solve SQL problems with control flow the code becomes difficult to read and it will not scale. It will burn CPU cycles and hog memory. You are hammering in a screw.
-
-### A Third Level
 
 That's the core of set-based programming - what, not how. Describe the data you want, let the SQL engine decide how to get it.
 
