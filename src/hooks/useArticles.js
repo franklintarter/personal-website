@@ -22,7 +22,7 @@ export default () => {
     `
   );
   return result.nodes.map(n => ({
-    slug: n.name,
+    slug: `/${n.name}`,
     frontmatter: n.childMdx.frontmatter,
     body: n.childMdx.body
   }));

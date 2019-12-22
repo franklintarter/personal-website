@@ -1,30 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "gatsby";
 import { SEO, useSEO } from "gatsby-plugin-seo";
-import Prism from "prismjs";
 import { useArticles } from "../hooks";
 import Layout from "../components/Layout";
 
 const ArticlePreview = ({ title, description, slug, tags }) => {
   const tagEls = tags.map(t => (
-    <div className="hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block">
+    <div
+      key={t}
+      className="hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block"
+    >
       {t}
     </div>
   ));
 
   return (
-    <>
-      {/* <Link to={slug} className="shadow p-4"> */}
-      <Link to={slug}>
-        <div className="mb-6 pb-1 border-b-2 border-gray-200 hover:border-brand-light-gray transition">
-          <h3 className="text-3xl text-brand-gray font-serif leading-tight mb-2">
-            {title}
-          </h3>
-          <p className="text-gray-700">{description}</p>
-          {tagEls}
-        </div>
-      </Link>
-    </>
+    <Link to={slug}>
+      <div className="mb-6 pb-1 border-b-2 border-gray-200 hover:border-brand-light-gray transition">
+        <h3 className="text-3xl text-brand-gray font-serif leading-tight mb-2">
+          {title}
+        </h3>
+        <p className="text-gray-700">{description}</p>
+        {tagEls}
+      </div>
+    </Link>
   );
 };
 
@@ -43,10 +42,6 @@ export default () => {
       description={article.frontmatter.description}
     />
   ));
-
-  useEffect(() => {
-    Prism.highlightAll();
-  });
   return (
     <Layout>
       <SEO
@@ -82,7 +77,6 @@ export default () => {
       <div className="mt-16">
         <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2>
         {articleEls}
-        {/* <MemeQuote /> */}
       </div>
     </Layout>
   );
