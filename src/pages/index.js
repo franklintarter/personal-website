@@ -82,7 +82,7 @@ export default () => {
       <div className="mt-16">
         <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2>
         {articleEls}
-        {/* <MemeQuote /> */}
+        <MemeQuote />
       </div>
     </Layout>
   );
