@@ -27,7 +27,11 @@ module.exports = {
           default: require.resolve("./src/templates/page-default.js"),
           "basic-pages": require.resolve("./src/templates/page-basic.js")
         },
-        gatsbyRemarkPlugins: ["gatsby-remark-prismjs"]
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-prismjs`
+          }
+        ]
       }
     },
     {

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SEO, useSEO } from "gatsby-plugin-seo";
 import { graphql } from "gatsby";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
+import Prism from "prismjs";
 import Layout from "../components/Layout";
 
 import { MdxComponentMap } from "../components/Typography";
@@ -20,6 +21,9 @@ export default ({ data }) => {
       }
     }
   } = data;
+  useEffect(() => {
+    Prism.highlightAll();
+  });
   return (
     <Layout>
       <SEO

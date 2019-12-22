@@ -294,10 +294,12 @@ div.code-toolbar > .toolbar button {
 div.code-toolbar > .toolbar a,
 div.code-toolbar > .toolbar button,
 div.code-toolbar > .toolbar span {
-  color: #938fac;
+  /* color: #938fac; */
+  color: #6a6392;
   font-size: 0.8em;
   padding: 0 0.5em;
   background: #e0e0e9;
+  margin-right: -1.025rem;
   /* background: rgba(224, 224, 224, 0.2); */
   /* box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2); */
 }
