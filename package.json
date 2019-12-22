@@ -23,7 +23,8 @@
     "test:cypress": "yarn generate-paths & cypress run",
     "generate-paths": "node ./cypress/util/generate-pages.js",
     "cypress": "cypress open",
-    "lighthouse-test": "lighthouse-test http://localhost:9000 90"
+    "lighthouse-test": "lighthouse-test http://localhost:9000 90",
+    "deploy:prod": "yarn build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@cypress/browserify-preprocessor": "^2.1.1",
