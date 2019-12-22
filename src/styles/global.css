@@ -41,10 +41,6 @@
   font-size: 3em;
 }
 
-/* .foo {
-  color: #6557b5;
-} */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

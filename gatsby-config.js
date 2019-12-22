@@ -115,6 +115,7 @@ module.exports = {
         siteUrl: "https://franklintarter.com",
         twitterCreator: "@franklintarter",
         twitterSite: "@franklintarter",
+        // TODO
         globalSchema: `{
             "@type": "WebSite",
             "@id": "https://franklintarter.com/#website",

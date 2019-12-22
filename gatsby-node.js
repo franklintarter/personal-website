@@ -45,8 +45,6 @@ exports.createPages = async ({ graphql, actions }) => {
   //   throw result.errors;
   // }
 
-  console.log("foo", result.data.articles.nodes);
-
   result.data.articles.nodes.forEach(({ name, id }) => {
     createPage({ path: name, component: articleTemplate, context: { id } });
   });
