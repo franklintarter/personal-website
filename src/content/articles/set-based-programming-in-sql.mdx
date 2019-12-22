@@ -5,13 +5,13 @@ tags:
   - SQL
 ---
 
-TLDR set-based programming is specifying `what` rather than `how`.
+TLDR set-based programming is specifying `what` rather than `how`. Describe the data you want. Let the engine decide how to get it.
 
-If that doesn't immediately resonate, continue and we will tie the concept of set-based programming to some familiar programming ideas.
+Let's conceptualize it.
 
 ## Let Go of Control Flow
 
-Let's compare the functional style and the procedural style of filtering items.
+Compare the functional style and the procedural style of filtering items.
 
 ```js
 // procedural
@@ -55,24 +55,24 @@ That's the core of set-based programming - what, not how. Describe the data you 
 
 Yes, here are some of the keywords:
 
-- BREAK
-- CONTINUE
-- GOTO label (no)
-- WHILE
-- Cursors - OPEN, FETCH, CLOSE
+- `BREAK`
+- `CONTINUE`
+- `GOTO` just no..
+- `WHILE`
+- Cursors - `OPEN, FETCH, CLOSE`
 
-Don't learn how to do anything with these. You wouldn't disable garbage collection on a new project built with a modern language, would you? Then don't write procedural SQL!
+Don't use these if you're writing new SQL. You wouldn't disable garbage collection on a new project built with a modern language, would you? Then don't write procedural SQL.
 
-Oddly enough, a project I'd worked on with crazy amounts of procedural SQL also had the garbage collection disabled in the C# part of the app!
+Oddly enough, a project I'd worked on with crazy amounts of procedural SQL also had the garbage collection disabled in the C# part of the app.
 
-You might learn the procedural syntax in SQL to understand how to get rid of it in a codebase you've inherited. Cross that bridge when you get there.
+You may need to learn the procedural syntax in SQL to understand how to get rid of it in a codebase you've inherited. Cross that bridge when you get there.
 
 ## The Beautiful Parts of SQL
 
 By removing control flow we're left with a fun and useful subset of the language.
 
 - `SELECT, INSERT, UPDATE, DELETE`
-- `Aggregate Functions`
+- `SUM, AVERAGE,` Aggregate Functions..
 - `GROUP BY, SORT`
 - `JOINs`
 - `CTEs`

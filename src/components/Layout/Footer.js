@@ -11,7 +11,6 @@ export default () => {
   const { twitterUrl, linkedInUrl, githubUrl } = useMetadata();
   return (
     <footer className="">
-      {/* <footer className="border-t border-gray-400"> */}
       <Section>
         <div className="py-6">
           <div className="flex items-center mb-4 justify-center">

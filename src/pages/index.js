@@ -4,10 +4,8 @@ import { SEO, useSEO } from "gatsby-plugin-seo";
 import Prism from "prismjs";
 import { useArticles } from "../hooks";
 import Layout from "../components/Layout";
-import { MemeQuote } from "../components/UI";
 
 const ArticlePreview = ({ title, description, slug, tags }) => {
-  console.log(tags);
   const tagEls = tags.map(t => (
     <div className="hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block">
       {t}
@@ -19,7 +17,9 @@ const ArticlePreview = ({ title, description, slug, tags }) => {
       {/* <Link to={slug} className="shadow p-4"> */}
       <Link to={slug}>
         <div className="mb-6 pb-1 border-b-2 border-gray-200 hover:border-brand-light-gray transition">
-          <h3 className="text-3xl text-brand-gray font-serif">{title}</h3>
+          <h3 className="text-3xl text-brand-gray font-serif leading-tight mb-2">
+            {title}
+          </h3>
           <p className="text-gray-700">{description}</p>
           {tagEls}
         </div>
@@ -63,26 +63,26 @@ export default () => {
               }
             }`}
       />
-      <h1
-        className="uppercase font-bold text-gray-800 leading-none"
-        // style={{ lineHeight: 0.75 }}
-      >
-        <span className="text-2xl mb-2 font-oswald tracking-wide">
+      <h1 className="uppercase font-bold text-gray-800 leading-none">
+        <span className="text-xl sm:text-2xl xs:text-3xl mb-2 font-oswald tracking-wide">
           Welcome to
         </span>
         <br />
-        <span className="text-3xl sm:text-5xl xs:text-4xl mb-6 font-oswald">
+        <span
+          className="text-4xl sm:text-5xl xs:text-5xl mb-6 font-oswald"
+          style={{ lineHeight: 0.9 }}
+        >
           Franklin Tarter&apos;s
         </span>
         <br />
-        <span className="text-xl xs:text-3xl font-oswald">
+        <span className="text-xl sm:text-2xl xs:text-3xl font-oswald">
           slice of the internet.
         </span>
       </h1>
       <div className="mt-16">
         <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2>
         {articleEls}
-        <MemeQuote />
+        {/* <MemeQuote /> */}
       </div>
     </Layout>
   );

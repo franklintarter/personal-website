@@ -14,18 +14,20 @@ const NavLink = ({ to, className = "", children }) => (
 export default () => {
   return (
     <nav role="navigation" aria-label="main-navigation">
-      <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center sm:mb-20 mb-12">
+      <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center sm:mb-16 mb-12">
         <div className="w-full xs:w-auto text-center">
           <Link className="flex justify-center" to="/">
-            <div className="text-gray-700 tracking-wider uppercase">FT</div>
+            <div className="font-bold text-3xl text-brand-gray tracking-wide uppercase font-serif">
+              FT
+            </div>
           </Link>
         </div>
-        <div className="flex justify-center xs:flex-grow-0 flex-grow">
+        {/* <div className="flex justify-center xs:flex-grow-0 flex-grow">
           <NavLink className="mr-4" to="/projects">
             Projects
           </NavLink>
           <NavLink to="/writing">Writing</NavLink>
-        </div>
+        </div> */}
       </div>
     </nav>
   );
