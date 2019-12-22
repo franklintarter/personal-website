@@ -53,3 +53,7 @@ body > div > div {
   height: 100%;
   font-family: "Nunito Sans", open-sans;
 }
+
+blockquote > p {
+  margin-top: 0 !important;
+}

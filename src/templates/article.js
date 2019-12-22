@@ -70,9 +70,11 @@ export default ({ data }) => {
           {frontmatter.formattedPublished}
         </p>
       </div>
-      <MDXProvider components={MdxComponentMap}>
-        <MDXRenderer>{body}</MDXRenderer>
-      </MDXProvider>
+      <div className="mb-16">
+        <MDXProvider components={MdxComponentMap}>
+          <MDXRenderer>{body}</MDXRenderer>
+        </MDXProvider>
+      </div>
     </Layout>
   );
 };

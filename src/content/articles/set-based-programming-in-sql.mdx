@@ -15,9 +15,11 @@ TLDR set-based programming is specifying `what` rather than `how`. Describe the 
 
 Let's conceptualize it.
 
-## Let Go of Control Flow
+## Let Go of Control
 
-Compare the functional style and the procedural style of filtering items.
+Remember when you first learned to program? I remember learning about control flow near the very beginning: `if, else, for loops`. I wrote procedural code because my brain was still grasping the basics.
+
+This is how I imagine my early code looked.
 
 ```js
 // procedural
@@ -30,22 +32,24 @@ for (let i = 0; i < items.length; i++) {
 }
 ```
 
-You must specify so many things:
+Notice all the things that must be specified:
 
 - Start at the beginning of the list `let i = 0`
 - Go through all the items `i < items.length`
 - Do not skip any items `i++`
 - Break when the filtering condition is met `if (items[i].price < 5) { break; }`
-- Push the current item into an array variable that you set up earlier `filteredItems.push(items[i])`
+- Push the current item into an array variable `filteredItems.push(items[i])`
 
 So much noise when the point is to filter one condition.
 
-And now functional.
+Let's compare that to the functional style.
 
 ```js
 // functional
 const filteredItems = items.filter(item => item.price < 5);
 ```
+
+This style of programming is very popular and for good reason.
 
 It's a one-liner and that's nice. But the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. Good SQL follows the same path.
 
@@ -69,9 +73,9 @@ Yes, here are some of the keywords:
 
 Don't use these if you're writing new SQL. You wouldn't disable garbage collection on a new project built with a modern language, would you? Then don't write procedural SQL.
 
-Oddly enough, a project I'd worked on with crazy amounts of procedural SQL also had the garbage collection disabled in the C# part of the app.
-
 You may need to learn the procedural syntax in SQL to understand how to get rid of it in a codebase you've inherited. Cross that bridge when you get there.
+
+> Oddly enough, a project I'd worked on with tons of procedural SQL also had roll-your-own garbage collection in the app code.
 
 ## The Beautiful Parts of SQL
 
@@ -83,4 +87,4 @@ By removing control flow we're left with a fun and useful subset of the language
 - `JOINs`
 - `CTEs`
 
-If you learn these well, you will write sound, clear SQL. You won't be pigeonholed when you need to squeeze out more performance.
+If you learn these well, you will write good SQL queries. You won't be pigeonholed when you need to squeeze out more performance.
