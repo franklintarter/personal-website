@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "gatsby";
 import Twitter from "../../img/svg/brands/twitter.svg";
 import LinkedIn from "../../img/svg/brands/linkedin-in.svg";
 import Github from "../../img/svg/brands/github.svg";

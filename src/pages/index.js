@@ -8,7 +8,7 @@ const ArticlePreview = ({ title, description, slug, tags }) => {
   const tagEls = tags.map(t => (
     <div
       key={t}
-      className="hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block"
+      className="transition hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block"
     >
       {t}
     </div>
@@ -46,15 +46,21 @@ export default () => {
     <Layout>
       <SEO
         title={pageTitle}
-        description="Software development includes writing instructions for computers. Software development is not equal to writing instructions for computers."
-        pagePath="/about"
+        description="Franklin Tarter's Personal Website"
+        pagePath="/"
         schema={`{
               "@context": "http://schema.org",
               "@type": "WebPage",
               "mainEntity": {
-                "@type": "Organization",
-                "name": "Example Company",
-                "image": "${siteUrl}/img/logo.png"
+                "@type": "Person",
+                "name": "Franklin Tarter",
+                "image": {
+                  "@type": "ImageObject",
+                  "@id": "${siteUrl}/#franklin",
+                  "url": "${siteUrl}/img/franklin.png",
+                  "caption": "Franklin Tarter"
+                },
+                "jobTitle": "Software Developer"
               }
             }`}
       />

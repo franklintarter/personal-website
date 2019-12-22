@@ -20,8 +20,6 @@ export default ({ data }) => {
       }
     }
   } = data;
-  // TODO add date and modified
-  console.log(frontmatter);
   return (
     <Layout>
       <SEO
@@ -60,9 +58,14 @@ export default ({ data }) => {
         }
                 `}
       />
-      <h1 className="font-oswald text-gray-900 text-4xl font-medium uppercase leading-tight mb-8">
-        {frontmatter.title}
-      </h1>
+      <div className="mb-8">
+        <h1 className="font-oswald text-gray-900 text-4xl font-medium uppercase leading-tight mb-2">
+          {frontmatter.title}
+        </h1>
+        <p className="text-sm text-gray-700 font-sans italic">
+          {frontmatter.formattedPublished}
+        </p>
+      </div>
       <MDXProvider components={MdxComponentMap}>
         <MDXRenderer>{body}</MDXRenderer>
       </MDXProvider>

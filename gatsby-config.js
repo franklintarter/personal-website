@@ -115,7 +115,6 @@ module.exports = {
         siteUrl: "https://franklintarter.com",
         twitterCreator: "@franklintarter",
         twitterSite: "@franklintarter",
-        // TODO
         globalSchema: `{
             "@type": "WebSite",
             "@id": "https://franklintarter.com/#website",
@@ -123,9 +122,9 @@ module.exports = {
             "name": "Franklin Tarter's Personal Website",
             "image": {
               "@type": "ImageObject",
-              "@id": "https://example.com/#logo",
-              "url": "https://example.com/img/logo.png",
-              "caption": "Franklin Tarter Logo"
+              "@id": "https://franklintarter.com/#franklin",
+              "url": "https://franklintarter.com/img/franklin.png",
+              "caption": "Franklin Tarter"
             }
           }`
       }
