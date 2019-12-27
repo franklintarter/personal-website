@@ -21,6 +21,7 @@ export default ({ data }) => {
       }
     }
   } = data;
+  console.log(text);
   useEffect(() => {
     Prism.highlightAll();
   });
@@ -38,7 +39,7 @@ export default ({ data }) => {
         "genre": "${frontmatter.genre}",
         "wordcount": "${words}",
         "url": "${siteUrl}/${name}",
-        "publisher": { 
+        "publisher": {
           "@type": "Person",
           "name": "Franklin Tarter"
         },
@@ -48,7 +49,7 @@ export default ({ data }) => {
         "dateCreated": "${frontmatter.datePublished}",
         "dateModified": "${frontmatter.dateModified}",
         "description": "${frontmatter.description}",
-        "articleBody": "${text}",
+        "articleBody": "${encodeURI(text)}",
         "author": {
             "@type": "Person",
             "name": "Franklin Tarter",

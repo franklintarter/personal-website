@@ -9,6 +9,7 @@ import HeroTitle from "./HeroTitle";
 import HeroSubtitle from "./HeroSubtitle";
 import UL from "./UL";
 import LI from "./LI";
+import HR from "./HR";
 import BlockQuote from "./BlockQuote";
 
 const MdxComponentMap = {
@@ -20,7 +21,8 @@ const MdxComponentMap = {
   a: A,
   ul: UL,
   li: LI,
-  blockquote: BlockQuote
+  blockquote: BlockQuote,
+  hr: HR
 };
 
 export {

@@ -6,6 +6,6 @@ const Component = ({ children, ...rest }) => {
 };
 
 Component.defaultClassName =
-  "text-2xl text-gray-900 font-semibold font-serif font-semibold mt-6";
+  "text-2xl text-gray-900 font-semibold font-serif font-semibold mt-6 -mb-3";
 
 export default withTailwindOverload(Component);
