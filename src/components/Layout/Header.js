@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "gatsby";
+// import
+
+import Logo from "../../../static/img/logo.svg";
 
 const NavLink = ({ to, className = "", children }) => (
   <Link
@@ -18,7 +21,11 @@ export default () => {
         <div className="w-full xs:w-auto text-center">
           <Link className="flex justify-center" to="/">
             <div className="font-bold text-3xl text-brand-gray tracking-wide uppercase font-serif">
-              FT
+              {/* <div>
+
+              </div> */}
+              <Logo className="w-12" />
+              {/* FT */}
             </div>
           </Link>
         </div>

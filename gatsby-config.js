@@ -4,7 +4,7 @@ module.exports = {
   siteMetadata: {
     siteUrl: "https://franklintarter.com",
     title: "Franklin Tarter",
-    image: "/img/mark.png", // Path to your image you placed in the 'static' folder
+    image: "/img/logo-bg.png", // Path to your image you placed in the 'static' folder
     description: "Franklin Tarter's personal website",
     twitterUrl: "https://twitter.com/franklintarter",
     linkedInUrl: "https://www.linkedin.com/in/franklintarter",
@@ -72,11 +72,11 @@ module.exports = {
         name: "Franklin Tarter's Personal Website",
         short_name: "Franklin Tarter's Website",
         start_url: "/",
-        background_color: "#fff", // TODO ensure color works well as background for Mark Color
-        theme_color: "#6b37bf", // TODO ensure color works well as background for Mark
+        background_color: "#fff",
+        theme_color: "#fff",
         // TODO Check favicon here after setting themes https://realfavicongenerator.net/
         display: "standalone",
-        icon: "static/img/mark.png", // TODO replace with Project asset should be 50:50 high quality ratio
+        icon: "static/img/logo.png",
         legacy: true,
         include_favicon: true,
         crossOrigin: ``
