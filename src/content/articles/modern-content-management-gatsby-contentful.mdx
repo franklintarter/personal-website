@@ -17,15 +17,15 @@ keywords:
 genre: software development
 ---
 
-Let's build a demo with a modern front end and content management stack. We'll create a website for a restaurant and use a CMS for keeping the menus up to date.
+Let's build a restaurant website with a modern front end and use a headless content management system (CMS) to keep the menu up to date.
 
 See the [source code](https://github.com/franklintarter/modern-cms-gatsby-contentful) for the finished result.
 
 For the website we will use [Gatsby](https://www.gatsbyjs.org/). Gatsby is a web framework that uses React as its front end and GraphQL for its data layer.
 
-The CMS will be [Contentful](https://www.contentful.com/). It has a fantastic UI for content management and a plugin for integrating with Gatsby.
+The CMS will be [Contentful](https://www.contentful.com/). It is a headless CMS with a GraphQL API, so it works very well with Gatsby.
 
-## Create the UI with Mock Data
+## Step 1: Bootstrap the Website
 
 Start a new project with the Gatsby CLI.
 
@@ -35,56 +35,59 @@ cd restaurant-website
 yarn develop
 ```
 
-Pop open your favorite code editor. Our first task will be creating the mock data in a JSON file so we can be informed on how to break down our components.
+Our content structure will be a list of menus. Each menu can have multiple sections. Each section can have multiple items and one image.
 
-Our content structure will be a list of menus. Each menu can have multiple sections. Each section can have multiple items. Here's some mock menu content that we can use to build out our React components.
+Pop open your favorite code editor and create the mock data in a JSON file.
 
 ```JSON
 // mock-data.json
 [
-    {
+  {
     "name": "Dinner",
     "sections": [
-        {
+      {
         "name": "Small Plates",
         "imageAlt": "ricotta & spinach gnocchi",
         "image": "https://images.unsplash.com/photo-1479832912902-77089f02b1d2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80",
         "items": [
-            {
+          {
             "name": "shrimp pil pil",
             "description": "sizzling shrimp, butter, garlic, chile flake",
             "price": 13
-            },
-            {
+          },
+          {
             "name": "ricotta & spinach gnocchi",
             "description": "brown butter, parmesan",
             "price": 8
-            }
+          }
         ]
-        },
-        {
+      },
+      {
         "name": "Mains",
         "imageAlt": "Baja Taco",
         "image": "https://images.unsplash.com/photo-1568106690101-fd6822e876f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1780&q=80",
         "items": [
-            {
+          {
             "name": "baja taco",
             "description": "hand battered/fried cod, provolone, chile aioli, tomatillo, shredded cabbage, queso cotija",
             "price": 7
-            },
-            {
+          },
+          {
             "name": "bucatini & meatballs",
             "description": "w/ tomato butter",
             "price": 11
-            }
+          }
         ]
-        }
+      }
     ]
-    }
+  }
 ]
+
 ```
 
 Now let's put that content into React components. All the components will sit on the same index.js file for brevity. In real life, you'd probably split each out into a separate file.
+
+We'll have three components other than the main page component in this file: `Menu`, `MenuSection`, `MenuItem`. We'll use some basic styling so it's somewhat presentable.
 
 ```JavaScript
 // src/pages/index.js
@@ -94,66 +97,66 @@ import Layout from "../components/layout"
 import menus from "../../mock-data.json"
 
 const MenuItem = ({ name, description, price }) => (
-    <div
+  <div
     style={{ display: "flex", justifyContent: "space-bewteen", width: "100%" }}
-    >
+  >
     <div style={{ flexGrow: 1 }}>
-        <h4 style={{ marginBottom: 0 }}>{name}</h4>
-        <p>{description}</p>
+      <h4 style={{ marginBottom: 0 }}>{name}</h4>
+      <p>{description}</p>
     </div>
     <p>{price}</p>
-    </div>
+  </div>
 )
 
 const MenuSection = ({ name, items, image, imageAlt }) => (
-    <div style={{ marginBottom: "4rem" }}>
+  <div style={{ marginBottom: "4rem" }}>
     <h3>{name}</h3>
     <img src={image} alt={imageAlt} />
     {items.map(item => (
-        <MenuItem
-        key={item.name}
-        name={item.name}
-        price={item.price}
-        description={item.description}
-        />
+      <MenuItem
+      key={item.name}
+      name={item.name}
+      price={item.price}
+      description={item.description}
+      />
     ))}
-    </div>
+  </div>
 )
 
 const Menu = ({ name, sections }) => (
-    <div style={{ marginBottom: "4rem" }}>
+  <div style={{ marginBottom: "4rem" }}>
     <h2>{name}</h2>
     {sections.map(s => (
-        <MenuSection
-        key={s.name}
-        name={s.name}
-        items={s.items}
-        image={s.image}
-        imageAlt={s.imageAlt}
-        />
+      <MenuSection
+      key={s.name}
+      name={s.name}
+      items={s.items}
+      image={s.image}
+      imageAlt={s.imageAlt}
+      />
     ))}
-    </div>
+  </div>
 )
 
 const IndexPage = () => (
-    <Layout>
+  <Layout>
     <div style={{ maxWidth: "28rem", margin: "0 auto" }}>
-        <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
-        {menus.map(m => (
+      <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
+      {menus.map(m => (
         <Menu key={m.key} name={m.name} sections={m.sections} />
-        ))}
+      ))}
     </div>
-    </Layout>
+  </Layout>
 )
 
 export default IndexPage
 ```
 
-And with that, we've got a website that lays out structured content for a restaurant menu.
+And with that, we've layed out our structured content.
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png)
 
-But a restaurant owner is not going to want to manage content in a JSON file and commit to git. Let's make the move from JSON to Contentful.
+The restaurant owner is not going to want to manage content in a JSON file and commit to git. Let's make the move from JSON to Contentful.
 
 ## Contentful
 
@@ -188,7 +191,7 @@ We'll run through creating the Menu in detail with screenshots but then referenc
 
 ### First Content Type
 
-It's efficient to go bottom-up and create the Menu Item first because the Menu Section has Menu Items as a field, and Menu has Menu Sections as a field. By starting with Menu Items we can create all content models in one pass through each.
+It's efficient to go bottom-up and create the Menu Item first because the Menu Section has Menu Items as a field, and Menu has Menu Sections as a field. By starting with Menu Items we can create all content models in one pass.
 
 Fill out the info for the Menu Item.
 
@@ -311,7 +314,9 @@ Okay this is really the fun part.
 
 Source plugins make it easy to grab data from various sources such as the filesystem, databases or third-party services. In our case, Contentful is our third-party CMS service and Gatsby has a plugin for it. Let's install it.
 
-    yarn add gatsby-source-contentful
+```shell
+yarn add gatsby-source-contentful
+```
 
 To use the plugin we need to add it to the `gatsby-config.js` file and give it our Contentful settings. Your Contentful `spaceId` and `accessToken` can be found on Contentful on the top navigation Settings > API keys. You can use the example API key they provide or create a new one.
 
@@ -319,11 +324,11 @@ To use the plugin we need to add it to the `gatsby-config.js` file and give it o
 // gatsby-config.js
 [
     {
-            resolve: `gatsby-source-contentful`,
-            options: {
-            spaceId: `your_space_id`,
-            accessToken: 'your_access_token'
-            },
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: `your_space_id`,
+        accessToken: 'your_access_token'
+      },
     }
     // .. other plugins
 ]
@@ -341,24 +346,24 @@ Throw this query into the Graphiql editor and see what data comes back.
 
 ```GraphQL
 query ALL_CONTENTFUL_MENU {
-    allContentfulMenu {
+  allContentfulMenu {
     nodes {
-        name
-        sections {
+      name
+      sections {
         altText
         items {
-            name
-            description
-            price
+          name
+          description
+          price
         }
         image {
-            fluid(maxWidth: 1000) {
+          fluid(maxWidth: 1000) {
             src
-            }
+          }
         }
-        }
+      }
     }
-    }
+  }
 }
 ```
 
@@ -375,31 +380,31 @@ We will create a simple wrapper for that GraphQL query that can be used by any p
 import { graphql, useStaticQuery } from "gatsby"
 
 export default () => {
-    const { allContentfulMenu } = useStaticQuery(
-    graphql`
-        query ALL_CONTENTFUL_MENU {
-        allContentfulMenu {
-            nodes {
-            name
-            sections {
-                altText
-                items {
-                name
-                description
-                price
-                }
-                image {
-                fluid(maxWidth: 1000) {
-                    src
-                }
-                }
+  const { allContentfulMenu } = useStaticQuery(
+  graphql`
+    query ALL_CONTENTFUL_MENU {
+      allContentfulMenu {
+        nodes {
+          name
+          sections {
+            altText
+            items {
+              name
+              description
+              price
             }
+            image {
+              fluid(maxWidth: 1000) {
+                src
+              }
             }
+          }
         }
-        }
-    `
-    )
-    return allContentfulMenu.nodes
+      }
+    }
+  `
+  )
+  return allContentfulMenu.nodes
 }
 ```
 
@@ -407,75 +412,77 @@ Now we modify our `src/pages/index.js` file to use the hook instead of the mock 
 
 ```JavaScript
 // src/pages/index.js
-    import React from "react"
-    import Layout from "../components/layout"
+import React from "react"
+import Layout from "../components/layout"
 
-    import useMenus from "../hooks/useMenus"
+import useMenus from "../hooks/useMenus"
 
-    const MenuItem = ({ name, description, price }) => (
-      <div
-        style={{ display: "flex", justifyContent: "space-bewteen", width: "100%" }}
-      >
-        <div style={{ flexGrow: 1 }}>
-          <h4 style={{ marginBottom: 0 }}>{name}</h4>
-          <p>{description}</p>
-        </div>
-        <p>{price}</p>
-      </div>
-    )
+const MenuItem = ({ name, description, price }) => (
+  <div
+    style={{ display: "flex", justifyContent: "space-bewteen", width: "100%" }}
+  >
+    <div style={{ flexGrow: 1 }}>
+      <h4 style={{ marginBottom: 0 }}>{name}</h4>
+      <p>{description}</p>
+    </div>
+    <p>{price}</p>
+  </div>
+)
 
-    const MenuSection = ({ name, items, image, imageAlt }) => (
-      <div style={{ marginBottom: "4rem" }}>
-        <h3>{name}</h3>
-        <img src={image} alt={imageAlt} />
-        {items.map(item => (
-          <MenuItem
-            key={item.name}
-            name={item.name}
-            price={item.price}
-            description={item.description}
-          />
+const MenuSection = ({ name, items, image, imageAlt }) => (
+  <div style={{ marginBottom: "4rem" }}>
+    <h3>{name}</h3>
+    <img src={image} alt={imageAlt} />
+    {items.map(item => (
+      <MenuItem
+        key={item.name}
+        name={item.name}
+        price={item.price}
+        description={item.description}
+      />
+    ))}
+  </div>
+)
+
+const Menu = ({ name, sections }) => (
+  <div style={{ marginBottom: "4rem" }}>
+    <h2>{name}</h2>
+    {sections.map(s => (
+      <MenuSection
+        key={s.name}
+        name={s.name}
+        items={s.items}
+        image={s.image.fluid.src}
+        imageAlt={s.imageAlt}
+      />
+    ))}
+  </div>
+)
+
+const IndexPage = () => {
+  const menus = useMenus()
+  return (
+    <Layout>
+      <div style={{ maxWidth: "28rem", margin: "0 auto" }}>
+        <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
+        {menus.map(m => (
+          <Menu key={m.key} name={m.name} sections={m.sections} />
         ))}
       </div>
-    )
+    </Layout>
+  )
+}
 
-    const Menu = ({ name, sections }) => (
-      <div style={{ marginBottom: "4rem" }}>
-        <h2>{name}</h2>
-        {sections.map(s => (
-          <MenuSection
-            key={s.name}
-            name={s.name}
-            items={s.items}
-            image={s.image.fluid.src}
-            imageAlt={s.imageAlt}
-          />
-        ))}
-      </div>
-    )
-
-    const IndexPage = () => {
-      const menus = useMenus()
-      return (
-        <Layout>
-          <div style={{ maxWidth: "28rem", margin: "0 auto" }}>
-            <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
-            {menus.map(m => (
-              <Menu key={m.key} name={m.name} sections={m.sections} />
-            ))}
-          </div>
-        </Layout>
-      )
-    }
-
-    export default IndexPage
+export default IndexPage
 ```
 
 Note that the image usage also changed slightly to handle the way the image object changed from a straight source URL to an object with a `fluid.src` property.
 
-If you were to take a diff of that file when it used the mock data to the Contentful hook it would be only a few lines of code. That's why I like to create hooks for GraphQL queries, it creates a nice seam in the layers of code. Components get to remain dumb just accepting props. The top-level page component makes a single call to a hook to get all the content needed. It's a pattern that feels good.
+I like to create hooks for GraphQL queries. It provies a nice seam in the layers of code. Components get to remain dumb just accepting props. The top-level page component makes a single call to a hook to get all the content needed. You could have fetched the Contentful data with a [page query](https://www.gatsbyjs.org/docs/page-query/) too.
 
-See the source code for this how-to. TODO link
+### Fin
+
+And we're done! See the [source code](https://github.com/franklintarter/modern-cms-gatsby-contentful) for the finished result and tinker around with more advanced content models.
 
 ### Resources
 
