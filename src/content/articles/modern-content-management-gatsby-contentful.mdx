@@ -1,7 +1,7 @@
 ---
 title: Modern Content Management with Gatsby and Contentful
 description: Build a website with a modern front end & content management stack.
-datePublished: 2019-12-31
+datePublished: 2019-12-29
 dateModified: 2019-12-31
 tags:
   - React
@@ -154,7 +154,7 @@ export default IndexPage
 
 And with that, we've layed out our structured content.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png)
+<!-- ![](../img/cms-1.png) -->
 
 The restaurant owner is not going to want to manage content in a JSON file and commit to git. Let's make the move from JSON to Contentful.
 
@@ -164,13 +164,15 @@ You can [create a free Contentful account](https://www.contentful.com/) if you d
 
 As of this writing you can create a free space on the free tier and keep the "Create an empty space" option.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1016bb26-df01-4bb8-9a72-a47150f2d05e/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1016bb26-df01-4bb8-9a72-a47150f2d05e/Untitled.png)
+![Contentful Empty Space](../img/cms-2.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7385a1-0d75-43ee-99f8-caa82305cd7d/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7385a1-0d75-43ee-99f8-caa82305cd7d/Untitled.png)
+<hr />
+
+![Contentful Space Details](../img/cms-3.png)
 
 If you've arrived at a blank space through that path or any other path you should see a recommendation to create a new content type.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d0bddc09-1c91-42a1-9819-93b3e10701c6/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d0bddc09-1c91-42a1-9819-93b3e10701c6/Untitled.png)
+![Contentful Space Home](../img/cms-4.png)
 
 We'll add a content type for each object type in our mock JSON content. We will need 3 in total with the following structure:
 
@@ -195,29 +197,27 @@ It's efficient to go bottom-up and create the Menu Item first because the Menu S
 
 Fill out the info for the Menu Item.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/848f3a22-ea7b-4ba2-ae3f-f15755f785be/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/848f3a22-ea7b-4ba2-ae3f-f15755f785be/Untitled.png)
+![Contentful Create Content Type](../img/cms-5.png)
 
-Add the first field
+Once we have a content type we can start adding fields. We'll create the "Name" field first.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/feed2c31-917f-47c5-8f61-b1340fc09445/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/feed2c31-917f-47c5-8f61-b1340fc09445/Untitled.png)
+![Contentful Create Content Field](../img/cms-6.png)
 
-The first field will be the name. And it will be the type "Text".
+Give it the type "Text".
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aa7a3602-ddef-406f-899b-8e8ed0df0197/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aa7a3602-ddef-406f-899b-8e8ed0df0197/Untitled.png)
+![Contentful Create Content Field](../img/cms-7.png)
 
 Set the "Name" field to "Name". Then select "Create and configure" there are a few more settings we want to tweak for this field.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4e4e6107-e804-4ecc-988d-10a4f13bc4b4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4e4e6107-e804-4ecc-988d-10a4f13bc4b4/Untitled.png)
+![Contentful Create Content Field 2](../img/cms-8.png)
 
 Check the field option for "This field represents the Entry title. This sets the name field as the label in the Contentful editor.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf386be6-3f72-4005-8290-23070af5517f/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf386be6-3f72-4005-8290-23070af5517f/Untitled.png)
+![Contentful Create Content Field 3 Options](../img/cms-9.png)
 
-Select the Validations tab in the top right and check off "Required" and "Unique". Because it doesn't make sense to have a menu item with no name, or to have two menu items with the same name.
+Select the Validations tab in the top right and check off "Required" and "Unique". Because it doesn't make sense to have a menu item with no name, or to have two menu items with the same name. Save with those settings.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d4d185c1-3305-4b53-96d7-ae379c151e18/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d4d185c1-3305-4b53-96d7-ae379c151e18/Untitled.png)
-
-Now save those settings for the name field.
+![Contentful Create Content Field 4 Options](../img/cms-10.png)
 
 I won't run through any more fields in detail since that'd be a ton of screenshots but go ahead and create the other two Menu Item fields as follows:
 
@@ -255,15 +255,15 @@ References are how you link your custom content types together. Just how with ou
 
 First step is to choose the reference type.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5484a1e7-4531-4279-a63c-85f3c68788de/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5484a1e7-4531-4279-a63c-85f3c68788de/Untitled.png)
+![Contentful Create Content Reference Field](../img/cms-11.png)
 
 And make sure it takes many references.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/702b29a0-04cd-40a9-810c-fb065735d544/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/702b29a0-04cd-40a9-810c-fb065735d544/Untitled.png)
+![Contentful Create Content Reference Field 2](../img/cms-12.png)
 
-And then make it required and force all the referenced items to be MenuItems. You wouldn't want to reference other menu sections or other menus in the items field.
+And then make it required and force all the referenced items to be MenuItems. You wouldn't want to reference other menu sections or other menus in the items field. Save it with those settings.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7aeb1692-5529-4e41-946c-58834a4ef6c0/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7aeb1692-5529-4e41-946c-58834a4ef6c0/Untitled.png)
+![Contentful Create Content Reference Field 4](../img/cms-13.png)
 
 ### Final Content Type
 
@@ -280,39 +280,39 @@ Our final type "Menu" has only two fields:
 
 Now we need to add actual content. Jump over to the content tab. This is where the fun begins according to Contentful, okay.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d6e5f524-b241-4972-b4e3-95b1f7855ab1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d6e5f524-b241-4972-b4e3-95b1f7855ab1/Untitled.png)
+![Contentful Create Content](../img/cms-14.png)
 
-Let's put all four menu items from our original JSON file in the Menu Item content type. With the content model set up correctly this part is pretty smooth.
+Put all four menu items from our original JSON file in the Menu Item content type. With the content model set up correctly this part is pretty smooth.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/984bdb35-12fa-4dd0-9aab-385de2bb6b41/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/984bdb35-12fa-4dd0-9aab-385de2bb6b41/Untitled.png)
+![Contentful Create Content 2](../img/cms-15.png)
 
 Once you have all four you should see this in the main content area.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/52dcc04a-b8a8-424d-a18d-79aaae8de3d5/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/52dcc04a-b8a8-424d-a18d-79aaae8de3d5/Untitled.png)
+![Contentful Create Content 3](../img/cms-16.png)
 
 Now we add our menu sections. For the images you can download them from the links in the mock JSON content or you can peruse [Unsplash](https://unsplash.com/) for other open license images.
 
 The small plates menu section should look something like this when you're done.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f98b9d42-2676-46e1-9045-34ab817acdb4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f98b9d42-2676-46e1-9045-34ab817acdb4/Untitled.png)
+![Contentful Create Content 4](../img/cms-17.png)
 
-Add the mains section in the same way. And finally add the dinner menu.
+Add the mains section in the same way. Then finally add the dinner menu.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/44643b8e-b189-4784-a1bc-36019467d7b7/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/44643b8e-b189-4784-a1bc-36019467d7b7/Untitled.png)
+![Contentful Create Content 5](../img/cms-18.png)
 
-You should have 4 menu items, two menu sections, and one menu.
+You should have four menu items, two menu sections, and one menu.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/747fa243-a915-45b7-9b14-6a709cab3fc1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/747fa243-a915-45b7-9b14-6a709cab3fc1/Untitled.png)
+![Contentful Create Content 6](../img/cms-19.png)
 
 More work than a JSON file isn't it? But not nearly as painful as content management often is!
 
 ## Linking Gatsby and Contentful
 
-Okay this is really the fun part.
+Okay, this is really the fun part.
 
-### Source Plugins
+### Gatsby Source Plugins
 
-Source plugins make it easy to grab data from various sources such as the filesystem, databases or third-party services. In our case, Contentful is our third-party CMS service and Gatsby has a plugin for it. Let's install it.
+Source plugins make it easy to grab data from various sources such as the filesystem, databases or third-party services. In our case, Contentful is our third-party CMS service and Gatsby has a plugin for it. It saves us from writing API requests by hand. We just need to provide it our Space ID and an API key. Let's install it.
 
 ```shell
 yarn add gatsby-source-contentful
@@ -336,9 +336,9 @@ To use the plugin we need to add it to the `gatsby-config.js` file and give it o
 
 Remember your access token is a secret so you don't want to commit it to source control. Follow the [plugin instructions](https://www.gatsbyjs.org/packages/gatsby-source-contentful/) for an example of keeping it safe.
 
-### Using GraphQL to Access Content
+### Use GraphQL to Access Content
 
-The Gatsby way of accessing all website data and metadata is through a GraphQL query. Since we've setup a source plugin for Contentful in the last step, we will see Contentful data coming through the Gatsby GraphQL layer.
+In Gatsby, all website data and metadata is accessed through a GraphQL query. Since we've setup a source plugin for Contentful in the last step, we will see Contentful data coming through the Gatsby GraphQL layer.
 
 Make sure your development instance is still running, if it's not run `yarn develop` again. The Gatsby develop command automatically creates a [Graphiql](https://github.com/graphql/graphiql) instance for us to write GraphQL queries with a visual editor. It runs on [http://localhost:8000/\_\_\_graphql](http://localhost:8000/___graphql).
 
@@ -367,7 +367,7 @@ query ALL_CONTENTFUL_MENU {
 }
 ```
 
-Play around with the left-hand side pane and see what other fields you can add - there are lots of metadata that Contentful provides that could be helpful.
+Play around with the left-hand side pane and see what other fields are available - there're tons of metadata that Contentful provides.
 
 ### Create a React Hook to Isolate Content Access
 
@@ -482,11 +482,13 @@ I like to create hooks for GraphQL queries. It provies a nice seam in the layers
 
 ### Fin
 
-And we're done! See the [source code](https://github.com/franklintarter/modern-cms-gatsby-contentful) for the finished result and tinker around with more advanced content models.
+And we're done! See the [source code](https://github.com/franklintarter/modern-cms-gatsby-contentful) for the finished result and try tinkering around with Contentful and Gatsby.
 
 ### Resources
 
 - [Gatsby](https://www.gatsbyjs.org/)
 - [Contentful](https://www.contentful.com/)
 - [Unsplash](https://unsplash.com/) - photos with an open license
-  - Photo credits to [https://unsplash.com/@fangshanli](https://unsplash.com/@fangshanli) and [https://unsplash.com/@heftiba](https://unsplash.com/@heftiba)
+- Photo credits
+  - [https://unsplash.com/@fangshanli](https://unsplash.com/@fangshanli)
+  - [https://unsplash.com/@heftiba](https://unsplash.com/@heftiba)

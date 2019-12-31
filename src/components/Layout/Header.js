@@ -19,7 +19,7 @@ export default () => {
     <nav role="navigation" aria-label="main-navigation">
       <div className="flex justify-center content-center flex-wrap xs:flex-no-wrap xs:justify-between items-center sm:mb-16 mb-12">
         <div className="w-full xs:w-auto text-center">
-          <Link className="flex justify-center" to="/">
+          <Link className="flex justify-center" to="/" title="Home">
             <div className="font-bold text-3xl text-brand-gray tracking-wide uppercase font-serif">
               {/* <div>
 

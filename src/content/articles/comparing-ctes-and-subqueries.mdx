@@ -1,7 +1,7 @@
 ---
 title: Comparing CTEs And Subqueries
 description: What are the implications of using a CTE instead of a subquery?
-datePublished: 2019-12-31
+datePublished: 2019-12-20
 dateModified: 2019-12-31
 tags:
   - SQL
@@ -21,10 +21,10 @@ The examples will come from the classic [Sakila database](https://dev.mysql.com/
 
 ## Requirements
 
-The rental store owner wants a view in a dashboard that shows:
+The rental store owner wants a view in a dashboard showing:
 
 - All customers who've rented a movie shorter than an hour
-- Their lifetime value (sum of all their payments)
+- The customer's lifetime value (sum of all their payments)
 
 ### Subquery Version
 
@@ -55,7 +55,7 @@ WHERE
     )
 ```
 
-### CTEs Version
+### CTE Version
 
 ```sql
 WITH payment_sum AS (
@@ -86,7 +86,7 @@ FROM
     JOIN payment_sum ps ON c.customer_id = ps.customer_id
 ```
 
-Both of these queries produce the correct results for the requirements. Note we are just returning the minimum data for brevity. No firstname, lastname or other display data.
+Both of these queries produce the correct results. Note we are just returning the minimum data for brevity. No firstname, lastname or other display data.
 
 ## Styles
 
@@ -96,11 +96,9 @@ Stylistically I prefer the CTE version for a few reasons.
 
 In the CTE version, each requirement is broken out and given a name. The requirements are not strewn out, unlabeled in the whole query.
 
-Rentals under one hour is a conceptual section.
-
 The subquery version could use a comment to label the JOIN and the subquery that apply to each requirement. But I find that comments are more likely go to stale than a CTE would be.
 
-Naming things is hard but not naming things is worse.
+Rentals under one hour is a conceptual section and it can be given a name with the CTE. Naming things is hard but not naming things is worse.
 
 ### Hints For Re-use
 
@@ -110,7 +108,7 @@ Less than hour long rentals could be a domain concept that applies to other feat
 
 ### Readability
 
-We've got two simple requirements in our example. It's reasonable to understand what's going on by taking in the whole thing. But what if there was more to it? What if there were 4 subqueries and 3 pretty complex JOINs? It can become difficult to grok.
+We've got two simple requirements in our example. It's reasonable to understand what's going on by taking in the whole thing. But what if there was more to it? What if there were 4 subqueries and 3 complex joins? It can become difficult to grok.
 
 The CTE version starts to shine the more complicated things get. The complexity of each statement and indentation can be capped.
 
@@ -118,7 +116,7 @@ The CTE version starts to shine the more complicated things get. The complexity 
 
 You can't speculate on performance. You have to measure.
 
-I used PostgreSQL's `Explain` to get some capture the actual cost of these queries. I've captured the two plans and put them in a graphical viewer. (Click or tap to see the images in full screen and zoom.)
+I used PostgreSQL's `Explain` to find the cost of these queries. I've captured the two plans and put them in a graphical viewer. (Click or tap to see the images in full screen and zoom.)
 
 ### Subqueries Plan
 
@@ -130,7 +128,7 @@ I used PostgreSQL's `Explain` to get some capture the actual cost of these queri
 
 These plans are nearly identical. You should be able write a subquery as a CTE and get pretty much the same plan, with small differences.
 
-But, as always with performance, you have to measure. That is the only way to know for sure if it's the same, better, or worse. And when you measure, look at the cost not the duration.
+But, as always with performance, you have to measure. That is the only way to know for sure if it's the same, better, or worse. When you measure, look at the cost not the duration.
 
 I tend to spot performance improvements more easily in CTEs, such as adding a missing SARG-able parameter. I attribute this to CTEs being broken down into smaller pieces.
 

@@ -4,7 +4,10 @@ export default () => {
   const { result } = useStaticQuery(
     graphql`
       {
-        result: allFile(filter: { sourceInstanceName: { eq: "articles" } }) {
+        result: allFile(
+          filter: { sourceInstanceName: { eq: "articles" } }
+          sort: { fields: childMdx___frontmatter___datePublished, order: DESC }
+        ) {
           nodes {
             childMdx {
               frontmatter {

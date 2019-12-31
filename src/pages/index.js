@@ -81,7 +81,7 @@ export default () => {
         </span>
       </h1>
       <div className="mt-16">
-        <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2>
+        {/* <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2> */}
         {articleEls}
       </div>
     </Layout>

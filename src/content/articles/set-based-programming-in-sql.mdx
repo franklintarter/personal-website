@@ -1,7 +1,7 @@
 ---
 title: Set-based Programming in SQL
 description: SQL works better when you write what rather than how. Describe the data you want. Let the engine decide how to get it.
-datePublished: 2019-12-31
+datePublished: 2019-12-18
 dateModified: 2019-12-31
 tags:
   - SQL
@@ -37,10 +37,10 @@ Notice all the things that must be specified:
 - Start at the beginning of the list `let i = 0`
 - Go through all the items `i < items.length`
 - Do not skip any items `i++`
-- Break when the filtering condition is met `if (items[i].price < 5) { break; }`
+- Break on the filtering condition `if (items[i].price < 5) { break; }`
 - Push the current item into an array variable `filteredItems.push(items[i])`
 
-So much noise when the point is to filter one condition.
+So much noise to filter on one condition.
 
 Let's compare that to the functional style.
 
@@ -51,7 +51,9 @@ const filteredItems = items.filter(item => item.price < 5);
 
 This style of programming is very popular and for good reason.
 
-It's a one-liner and that's nice. But the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. Good SQL follows the same path.
+It's a one-liner and that's nice but the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. You trust the `array.filter` method.
+
+Good SQL follows the same path, trusting the engine.
 
 ## SQL - What, Not How
 
@@ -87,4 +89,4 @@ By removing control flow we're left with a fun and useful subset of the language
 - `JOINs`
 - `CTEs`
 
-If you learn these well, you will write good SQL queries. You won't be pigeonholed when you need to squeeze out more performance.
+If you learn these well, you will write good SQL queries. You won't be pigeonholed when you need to squeeze out more performance with the proper tools.

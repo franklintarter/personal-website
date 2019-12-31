@@ -95,6 +95,7 @@ export const query = graphql`
           formattedModified: dateModified(formatString: "MMMM DD, YYYY")
           datePublished
           dateModified
+          genre
         }
         wordCount {
           words

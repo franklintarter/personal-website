@@ -133,6 +133,7 @@ module.exports = {
           }`
       }
     },
+    `gatsby-plugin-remove-trailing-slashes`,
     {
       resolve: "gatsby-plugin-purgecss",
       options: {
