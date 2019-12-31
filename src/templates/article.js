@@ -71,7 +71,7 @@ export default ({ data }) => {
           {frontmatter.formattedPublished}
         </p>
       </div>
-      <div className="mb-16">
+      <div className="mb-16 article-body">
         <MDXProvider components={MdxComponentMap}>
           <MDXRenderer>{body}</MDXRenderer>
         </MDXProvider>

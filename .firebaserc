@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "personal-website-25220"
+    "default": "personal-site-stage",
+    "staging": "personal-site-stage"
   }
 }

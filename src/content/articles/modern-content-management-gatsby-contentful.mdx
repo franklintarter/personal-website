@@ -1,0 +1,485 @@
+---
+title: Modern Content Management with Gatsby and Contentful
+description: Build a website with a modern front end & content management stack.
+datePublished: 2019-12-31
+dateModified: 2019-12-31
+tags:
+  - React
+  - Gatsby
+  - CMS
+keywords:
+  - React
+  - Contentful
+  - Gatsby
+  - CMS
+  - Frontend
+  - JavaScript
+genre: software development
+---
+
+Let's build a demo with a modern front end and content management stack. We'll create a website for a restaurant and use a CMS for keeping the menus up to date.
+
+See the [source code](https://github.com/franklintarter/modern-cms-gatsby-contentful) for the finished result.
+
+For the website we will use [Gatsby](https://www.gatsbyjs.org/). Gatsby is a web framework that uses React as its front end and GraphQL for its data layer.
+
+The CMS will be [Contentful](https://www.contentful.com/). It has a fantastic UI for content management and a plugin for integrating with Gatsby.
+
+## Create the UI with Mock Data
+
+Start a new project with the Gatsby CLI.
+
+```shell
+npx gatsby new restaurant-website
+cd restaurant-website
+yarn develop
+```
+
+Pop open your favorite code editor. Our first task will be creating the mock data in a JSON file so we can be informed on how to break down our components.
+
+Our content structure will be a list of menus. Each menu can have multiple sections. Each section can have multiple items. Here's some mock menu content that we can use to build out our React components.
+
+```JSON
+// mock-data.json
+[
+    {
+    "name": "Dinner",
+    "sections": [
+        {
+        "name": "Small Plates",
+        "imageAlt": "ricotta & spinach gnocchi",
+        "image": "https://images.unsplash.com/photo-1479832912902-77089f02b1d2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80",
+        "items": [
+            {
+            "name": "shrimp pil pil",
+            "description": "sizzling shrimp, butter, garlic, chile flake",
+            "price": 13
+            },
+            {
+            "name": "ricotta & spinach gnocchi",
+            "description": "brown butter, parmesan",
+            "price": 8
+            }
+        ]
+        },
+        {
+        "name": "Mains",
+        "imageAlt": "Baja Taco",
+        "image": "https://images.unsplash.com/photo-1568106690101-fd6822e876f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1780&q=80",
+        "items": [
+            {
+            "name": "baja taco",
+            "description": "hand battered/fried cod, provolone, chile aioli, tomatillo, shredded cabbage, queso cotija",
+            "price": 7
+            },
+            {
+            "name": "bucatini & meatballs",
+            "description": "w/ tomato butter",
+            "price": 11
+            }
+        ]
+        }
+    ]
+    }
+]
+```
+
+Now let's put that content into React components. All the components will sit on the same index.js file for brevity. In real life, you'd probably split each out into a separate file.
+
+```JavaScript
+// src/pages/index.js
+import React from "react"
+import Layout from "../components/layout"
+
+import menus from "../../mock-data.json"
+
+const MenuItem = ({ name, description, price }) => (
+    <div
+    style={{ display: "flex", justifyContent: "space-bewteen", width: "100%" }}
+    >
+    <div style={{ flexGrow: 1 }}>
+        <h4 style={{ marginBottom: 0 }}>{name}</h4>
+        <p>{description}</p>
+    </div>
+    <p>{price}</p>
+    </div>
+)
+
+const MenuSection = ({ name, items, image, imageAlt }) => (
+    <div style={{ marginBottom: "4rem" }}>
+    <h3>{name}</h3>
+    <img src={image} alt={imageAlt} />
+    {items.map(item => (
+        <MenuItem
+        key={item.name}
+        name={item.name}
+        price={item.price}
+        description={item.description}
+        />
+    ))}
+    </div>
+)
+
+const Menu = ({ name, sections }) => (
+    <div style={{ marginBottom: "4rem" }}>
+    <h2>{name}</h2>
+    {sections.map(s => (
+        <MenuSection
+        key={s.name}
+        name={s.name}
+        items={s.items}
+        image={s.image}
+        imageAlt={s.imageAlt}
+        />
+    ))}
+    </div>
+)
+
+const IndexPage = () => (
+    <Layout>
+    <div style={{ maxWidth: "28rem", margin: "0 auto" }}>
+        <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
+        {menus.map(m => (
+        <Menu key={m.key} name={m.name} sections={m.sections} />
+        ))}
+    </div>
+    </Layout>
+)
+
+export default IndexPage
+```
+
+And with that, we've got a website that lays out structured content for a restaurant menu.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57cca5d1-3479-4902-9a71-e3b06bfaf661/Untitled.png)
+
+But a restaurant owner is not going to want to manage content in a JSON file and commit to git. Let's make the move from JSON to Contentful.
+
+## Contentful
+
+You can [create a free Contentful account](https://www.contentful.com/) if you don't have one. Contentful's onboarding screens may change but you will want to get to a blank "Space".
+
+As of this writing you can create a free space on the free tier and keep the "Create an empty space" option.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1016bb26-df01-4bb8-9a72-a47150f2d05e/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1016bb26-df01-4bb8-9a72-a47150f2d05e/Untitled.png)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7385a1-0d75-43ee-99f8-caa82305cd7d/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7385a1-0d75-43ee-99f8-caa82305cd7d/Untitled.png)
+
+If you've arrived at a blank space through that path or any other path you should see a recommendation to create a new content type.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d0bddc09-1c91-42a1-9819-93b3e10701c6/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d0bddc09-1c91-42a1-9819-93b3e10701c6/Untitled.png)
+
+We'll add a content type for each object type in our mock JSON content. We will need 3 in total with the following structure:
+
+- Menu
+  - Name
+  - List of Menu Sections
+- Menu Section
+  - Name
+  - Image
+  - Image Alt
+  - List of Menu Items
+- Menu Item
+  - Name
+  - Description
+  - Price
+
+We'll run through creating the Menu in detail with screenshots but then reference the list above to determine what options to use in Contentful.
+
+### First Content Type
+
+It's efficient to go bottom-up and create the Menu Item first because the Menu Section has Menu Items as a field, and Menu has Menu Sections as a field. By starting with Menu Items we can create all content models in one pass through each.
+
+Fill out the info for the Menu Item.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/848f3a22-ea7b-4ba2-ae3f-f15755f785be/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/848f3a22-ea7b-4ba2-ae3f-f15755f785be/Untitled.png)
+
+Add the first field
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/feed2c31-917f-47c5-8f61-b1340fc09445/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/feed2c31-917f-47c5-8f61-b1340fc09445/Untitled.png)
+
+The first field will be the name. And it will be the type "Text".
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aa7a3602-ddef-406f-899b-8e8ed0df0197/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aa7a3602-ddef-406f-899b-8e8ed0df0197/Untitled.png)
+
+Set the "Name" field to "Name". Then select "Create and configure" there are a few more settings we want to tweak for this field.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4e4e6107-e804-4ecc-988d-10a4f13bc4b4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4e4e6107-e804-4ecc-988d-10a4f13bc4b4/Untitled.png)
+
+Check the field option for "This field represents the Entry title. This sets the name field as the label in the Contentful editor.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf386be6-3f72-4005-8290-23070af5517f/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf386be6-3f72-4005-8290-23070af5517f/Untitled.png)
+
+Select the Validations tab in the top right and check off "Required" and "Unique". Because it doesn't make sense to have a menu item with no name, or to have two menu items with the same name.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d4d185c1-3305-4b53-96d7-ae379c151e18/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d4d185c1-3305-4b53-96d7-ae379c151e18/Untitled.png)
+
+Now save those settings for the name field.
+
+I won't run through any more fields in detail since that'd be a ton of screenshots but go ahead and create the other two Menu Item fields as follows:
+
+- Description
+  - Name: Description
+  - Type: Text, Short Text
+- Price
+  - Name: Price
+  - Type: Number, Decimal, Required
+
+One down, two to go
+
+### Second Content Type
+
+Now the Menu Section. Create the type as the Menu Item and add the following fields:
+
+- Name
+  - Name: Name
+  - Type: Text, Short Text, Required, Unique, Entry title
+- Image
+  - Name: Image
+  - Type: Media, One File, Required, Accept Only Image File Types
+- Image Alt
+  - Name: Image Alt
+  - Type: Text, Short Text, Required
+- List of Menu Items
+  - Name: Items
+  - Type: Reference, Many references, Required, Accept Only MenuItem
+
+Okay, the list of Menu Items is a little different. Let's go into a little more detail.
+
+### Adding References
+
+References are how you link your custom content types together. Just how with our JSON object we had Menu Items nested inside of Menu Sections, not just primitive types like numbers and strings. References are how to do that in Contentful.
+
+First step is to choose the reference type.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5484a1e7-4531-4279-a63c-85f3c68788de/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5484a1e7-4531-4279-a63c-85f3c68788de/Untitled.png)
+
+And make sure it takes many references.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/702b29a0-04cd-40a9-810c-fb065735d544/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/702b29a0-04cd-40a9-810c-fb065735d544/Untitled.png)
+
+And then make it required and force all the referenced items to be MenuItems. You wouldn't want to reference other menu sections or other menus in the items field.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7aeb1692-5529-4e41-946c-58834a4ef6c0/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7aeb1692-5529-4e41-946c-58834a4ef6c0/Untitled.png)
+
+### Final Content Type
+
+Our final type "Menu" has only two fields:
+
+- Name
+  - Name: Name
+  - Type: Text, Short Text, Required, Unique, Entry title
+- List of Menu Sections
+  - Name: Sections
+  - Type: Reference, Many references, Required, Accept Only MenuSection
+
+### Adding Content
+
+Now we need to add actual content. Jump over to the content tab. This is where the fun begins according to Contentful, okay.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d6e5f524-b241-4972-b4e3-95b1f7855ab1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d6e5f524-b241-4972-b4e3-95b1f7855ab1/Untitled.png)
+
+Let's put all four menu items from our original JSON file in the Menu Item content type. With the content model set up correctly this part is pretty smooth.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/984bdb35-12fa-4dd0-9aab-385de2bb6b41/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/984bdb35-12fa-4dd0-9aab-385de2bb6b41/Untitled.png)
+
+Once you have all four you should see this in the main content area.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/52dcc04a-b8a8-424d-a18d-79aaae8de3d5/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/52dcc04a-b8a8-424d-a18d-79aaae8de3d5/Untitled.png)
+
+Now we add our menu sections. For the images you can download them from the links in the mock JSON content or you can peruse [Unsplash](https://unsplash.com/) for other open license images.
+
+The small plates menu section should look something like this when you're done.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f98b9d42-2676-46e1-9045-34ab817acdb4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f98b9d42-2676-46e1-9045-34ab817acdb4/Untitled.png)
+
+Add the mains section in the same way. And finally add the dinner menu.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/44643b8e-b189-4784-a1bc-36019467d7b7/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/44643b8e-b189-4784-a1bc-36019467d7b7/Untitled.png)
+
+You should have 4 menu items, two menu sections, and one menu.
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/747fa243-a915-45b7-9b14-6a709cab3fc1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/747fa243-a915-45b7-9b14-6a709cab3fc1/Untitled.png)
+
+More work than a JSON file isn't it? But not nearly as painful as content management often is!
+
+## Linking Gatsby and Contentful
+
+Okay this is really the fun part.
+
+### Source Plugins
+
+Source plugins make it easy to grab data from various sources such as the filesystem, databases or third-party services. In our case, Contentful is our third-party CMS service and Gatsby has a plugin for it. Let's install it.
+
+    yarn add gatsby-source-contentful
+
+To use the plugin we need to add it to the `gatsby-config.js` file and give it our Contentful settings. Your Contentful `spaceId` and `accessToken` can be found on Contentful on the top navigation Settings > API keys. You can use the example API key they provide or create a new one.
+
+```JavaScript
+// gatsby-config.js
+[
+    {
+            resolve: `gatsby-source-contentful`,
+            options: {
+            spaceId: `your_space_id`,
+            accessToken: 'your_access_token'
+            },
+    }
+    // .. other plugins
+]
+```
+
+Remember your access token is a secret so you don't want to commit it to source control. Follow the [plugin instructions](https://www.gatsbyjs.org/packages/gatsby-source-contentful/) for an example of keeping it safe.
+
+### Using GraphQL to Access Content
+
+The Gatsby way of accessing all website data and metadata is through a GraphQL query. Since we've setup a source plugin for Contentful in the last step, we will see Contentful data coming through the Gatsby GraphQL layer.
+
+Make sure your development instance is still running, if it's not run `yarn develop` again. The Gatsby develop command automatically creates a [Graphiql](https://github.com/graphql/graphiql) instance for us to write GraphQL queries with a visual editor. It runs on [http://localhost:8000/\_\_\_graphql](http://localhost:8000/___graphql).
+
+Throw this query into the Graphiql editor and see what data comes back.
+
+```GraphQL
+query ALL_CONTENTFUL_MENU {
+    allContentfulMenu {
+    nodes {
+        name
+        sections {
+        altText
+        items {
+            name
+            description
+            price
+        }
+        image {
+            fluid(maxWidth: 1000) {
+            src
+            }
+        }
+        }
+    }
+    }
+}
+```
+
+Play around with the left-hand side pane and see what other fields you can add - there are lots of metadata that Contentful provides that could be helpful.
+
+### Create a React Hook to Isolate Content Access
+
+Now that we know how to query the data, let's write a React hook that brings that result in the context of our Gatsby site. Create a file at `src/hooks/useMenus.js`.
+
+We will create a simple wrapper for that GraphQL query that can be used by any part of the website.
+
+```JavaScript
+// src/hooks/useMenus.js
+import { graphql, useStaticQuery } from "gatsby"
+
+export default () => {
+    const { allContentfulMenu } = useStaticQuery(
+    graphql`
+        query ALL_CONTENTFUL_MENU {
+        allContentfulMenu {
+            nodes {
+            name
+            sections {
+                altText
+                items {
+                name
+                description
+                price
+                }
+                image {
+                fluid(maxWidth: 1000) {
+                    src
+                }
+                }
+            }
+            }
+        }
+        }
+    `
+    )
+    return allContentfulMenu.nodes
+}
+```
+
+Now we modify our `src/pages/index.js` file to use the hook instead of the mock content.
+
+```JavaScript
+// src/pages/index.js
+    import React from "react"
+    import Layout from "../components/layout"
+
+    import useMenus from "../hooks/useMenus"
+
+    const MenuItem = ({ name, description, price }) => (
+      <div
+        style={{ display: "flex", justifyContent: "space-bewteen", width: "100%" }}
+      >
+        <div style={{ flexGrow: 1 }}>
+          <h4 style={{ marginBottom: 0 }}>{name}</h4>
+          <p>{description}</p>
+        </div>
+        <p>{price}</p>
+      </div>
+    )
+
+    const MenuSection = ({ name, items, image, imageAlt }) => (
+      <div style={{ marginBottom: "4rem" }}>
+        <h3>{name}</h3>
+        <img src={image} alt={imageAlt} />
+        {items.map(item => (
+          <MenuItem
+            key={item.name}
+            name={item.name}
+            price={item.price}
+            description={item.description}
+          />
+        ))}
+      </div>
+    )
+
+    const Menu = ({ name, sections }) => (
+      <div style={{ marginBottom: "4rem" }}>
+        <h2>{name}</h2>
+        {sections.map(s => (
+          <MenuSection
+            key={s.name}
+            name={s.name}
+            items={s.items}
+            image={s.image.fluid.src}
+            imageAlt={s.imageAlt}
+          />
+        ))}
+      </div>
+    )
+
+    const IndexPage = () => {
+      const menus = useMenus()
+      return (
+        <Layout>
+          <div style={{ maxWidth: "28rem", margin: "0 auto" }}>
+            <h1 style={{ marginBottom: "4rem" }}>Menus</h1>
+            {menus.map(m => (
+              <Menu key={m.key} name={m.name} sections={m.sections} />
+            ))}
+          </div>
+        </Layout>
+      )
+    }
+
+    export default IndexPage
+```
+
+Note that the image usage also changed slightly to handle the way the image object changed from a straight source URL to an object with a `fluid.src` property.
+
+If you were to take a diff of that file when it used the mock data to the Contentful hook it would be only a few lines of code. That's why I like to create hooks for GraphQL queries, it creates a nice seam in the layers of code. Components get to remain dumb just accepting props. The top-level page component makes a single call to a hook to get all the content needed. It's a pattern that feels good.
+
+See the source code for this how-to. TODO link
+
+### Resources
+
+- [Gatsby](https://www.gatsbyjs.org/)
+- [Contentful](https://www.contentful.com/)
+- [Unsplash](https://unsplash.com/) - photos with an open license
+  - Photo credits to [https://unsplash.com/@fangshanli](https://unsplash.com/@fangshanli) and [https://unsplash.com/@heftiba](https://unsplash.com/@heftiba)

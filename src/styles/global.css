@@ -54,6 +54,19 @@ body > div > div {
   font-family: "Nunito Sans", open-sans;
 }
 
+.article-body ul {
+  margin-top: 1rem;
+}
+
+.article-body li > ul {
+  margin-top: 0;
+}
+
 blockquote > p {
   margin-top: 0 !important;
+}
+
+.article-body .gatsby-resp-image-wrapper {
+  margin-left: -1rem !important;
+  margin-right: -1rem !important;
 }
