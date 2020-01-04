@@ -2,7 +2,7 @@
 title: Set-based Programming in SQL
 description: SQL works better when you write what rather than how. Describe the data you want. Let the engine decide how to get it.
 datePublished: 2019-12-18
-dateModified: 2019-12-31
+dateModified: 2020-01-04
 tags:
   - SQL
 keywords:
@@ -51,9 +51,9 @@ const filteredItems = items.filter(item => item.price < 5);
 
 This style of programming is very popular and for good reason.
 
-It's a one-liner and that's nice but the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. You trust the `array.filter` method.
+It's a one-liner and that's nice but the real benefit is the signal to noise ratio. You tell the program what you want. It is [declarative](https://en.wikipedia.org/wiki/Declarative_programming). You don't specify the details of how it happens. You trust the `array.filter` method. Good SQL follows the same path, trusting the engine.
 
-Good SQL follows the same path, trusting the engine.
+The analogy comparing procedural code to functional code and procedural SQL to declarative SQL is not perfect but I think it is useful.
 
 ## SQL - What, Not How
 

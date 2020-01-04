@@ -24,7 +24,7 @@
     "generate-paths": "node ./cypress/util/generate-pages.js",
     "cypress": "cypress open",
     "lighthouse-test": "lighthouse-test http://localhost:9000 90",
-    "deploy:prod": "yarn build && firebase deploy --only hosting"
+    "deploy:prod": "yarn build && firebase use prod && firebase deploy --only hosting"
   },
   "dependencies": {
     "@cypress/browserify-preprocessor": "^2.1.1",
