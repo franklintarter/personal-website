@@ -1,0 +1,128 @@
+---
+title: SQL Index Introduction
+description: What are the implications of using a CTE instead of a subquery?
+datePublished: 2020-02-01
+dateModified: 2020-02-01
+tags:
+  - SQL
+  - Indexes
+keywords:
+  - SQL
+  - Indexes
+genre: software development
+---
+
+## Why Indexes
+
+A useful index allows the database to do less work for certain queries. Developers add them to improve performance. Diagnostic tools are quick to recommend them. But they are not free. They need storage and can increase the work to update, insert, and delete rows. An index should provide more value than it costs. It should earn its keep.
+
+Let's use a classic analogy to understand the motivation for adding indexes. Then let's see what happens when we add too many. With that foundational understanding, we will look into indexing in a real application.
+
+## Be the Database
+
+We are in charge of a phone book. People ask for information from the book in various ways (queries). People also tell us to create, update or delete entries in the book. We are the database engine and the phone book is our table.
+
+The book is one long list of entries. Each entry has three columns: firstname, lastname, and phone number.
+
+```markdown
+    | firstname | lastname | phone_number |
+    |-----------|----------|--------------|
+    | Delores   | O'Neil   | 555-555-1234 |
+    | Avni      | Huber    | 555-555-2345 |
+    | ...       | ...      | ...          |
+    | Devin     | Graham   | 555-555-3456 |
+```
+
+The book is not sorted. When we create new entries we stick them at the end of the last page.
+
+### Find
+
+The most common request is – get a phone number for a given person's name. With an unsorted book we have to scan the phone book from the beginning until we find a name match.
+
+If they're on the first page, it's quick. If they're on the last page, it takes as long as reading the whole phone book. If they aren't in the phone book, we have to read the whole thing to verify that they are not there. We have poor performance. What can we do to improve?
+
+We can't read any faster but we could read fewer pages. So we sort the book's entries in alphabetical order by lastname, then by firstname. Now we can seek the sorted names to find the matching one. No more reading the whole phone book for lookups. We found a huge performance gain.
+
+```markdown
+| lastname | firstname | phone_number |
+| -------- | --------- | ------------ |
+| Aaberg   | ...       | 555-555-1234 |
+| ...      | ...       | 555-555-2345 |
+| Baar     | ...       | 555-555-3456 |
+| ...      | ...       | 555-555-4567 |
+| Caamano  | ...       | 555-555-5678 |
+```
+
+### Updates
+
+Before we sorted our book, updating was as painful as the lookups. We'd scan until we found the matching name, then change the phone number.
+
+Now it's sorted and we can seek the correct name then do the update. No reading the whole phone book for updates anymore. That's lucky, the lastname sorting sped up our most common update and our most common query.
+
+### Deletes
+
+Another common request is – someone gives their name and asks to be removed from the phone book. Our sorted book makes this easier too. We can find people by name quickly, so we can find and delete them quickly.
+
+### Inserts
+
+People need to be added to the book. When our book was unsorted we could add them to the end of the book without thinking about where to put them. Since it's sorted we need to determine the right place to put them. This is the first request that is harder than it used to be. It's not a lot harder, but it is harder.
+
+### Was the Sorting Worth It?
+
+Our most common queries, updates, and deletes got easier and faster. Only the insert got harder and slower. It was worth it for all the tasks we've described above. If these requests were the entirety of our job, sorting was a silver bullet.
+
+Real-world jobs (or apps) have more than four obvious tasks. Let's simulate that by adding some obscure requests to our job.
+
+### Other Use Cases
+
+Someone is doing a report and wants to know how many people in the area have the firstname Sam. Lastname → firstname sorting isn't any help here. We have to go back to reading the whole phone book, counting every time we see the firstname Sam. Can we speed up this query?
+
+If we sorted the book by firstname we could be quicker. We could seek to where Sam started and then stop counting when we saw the first non-Sam.
+
+```markdown
+| firstname | lastname | phone_number |
+| --------- | -------- | ------------ |
+| Sal       | ...      | 555-555-1234 |
+| Sam       | ...      | 555-555-2345 |
+| Sam       | ...      | 555-555-3456 |
+| Sam       | ...      | 555-555-4567 |
+| Simon     | ...      | 555-555-5678 |
+```
+
+Did changing the sort order have a negative effect on the other queries? No, we can change our query plan to use firstname first and lastname second when we do our alphabetical seek. It's a different plan but it shouldn't change the speed or ease.
+
+We've made the book more useful. It still supports our common queries and also this less common report query.
+
+### Reporting Throws in a Wrench
+
+Word has gotten around that we will answer all kinds of report questions. We're now asked lastname based queries. For example – how many people have the last name where the first two letters are JO. Can we accommodate these lastname requests?
+
+We could switch sorting back to lastname → firstname but that makes our firstname queries slow again. The book can't be sorted by both firstname → lastname and lastname → firstname at the same time. We have two query types that are at odds with how the data is sorted. But the book can only be sorted one way or the other.
+
+### Multiple Books
+
+We can't have one physical book sorted in two different ways at once but we could have multiple books. We can copy the book and sort each copy differently. When a request comes in we can use the book that best fits the request.
+
+Now we've got a pretty quick response for various report requests coming in. Let's say we get up to five book copies all sorted differently that cover the variety of queries.
+
+### Trade-offs of Multiple Books
+
+There are several downsides to having all these books. The obvious one is needing more shelf space (storage). That's not too bad though because storage is pretty cheap. But there's a more troublesome downside.
+
+Remember people need their info updated, they need it added, and they need it removed. We have to keep all copies of the phone book current. We also need to maintain the sorting in each. Any change data request becomes slower and more difficult with each copy.
+
+The other queries get slower too. Basic lookups must wait until we finish updates to ensure accuracy. The request queue is piling up.
+
+### Screeching to a Halt
+
+Our core use case of fetching, updating, adding and deleting is degraded. Querying the phone book has become slow for everyone. We got obsessed with indexing and now we've "optimized" ourselves into a bad place.
+
+So ends the analogy.
+
+## Real World Apps
+
+The phone book example illustrates how many databases end up. I chose a reporting use case to derail things because it happens so often in real apps. An admin dashboard showing aggregate data has a very different query plan than the UI for end-users.
+
+Sometimes there's an easy win. We saw that when we changed the lastname first sorting to firstnames first. It kept support for the core users and added support for report queries with no downside. But at some point, we optimized for reporting purposes that were at odds with our main purpose.
+
+We need a sound approach to indexing. We want to determine the value of an index and understand its true cost. For now, the takeaway is there's no such thing as a "good" index in a vacuum. An index is only good or bad in the context of the whole application, including all DB queries.

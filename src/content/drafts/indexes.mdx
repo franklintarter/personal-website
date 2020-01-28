@@ -1,0 +1,74 @@
+---
+title: WIP
+description: WIP
+datePublished: WIP
+dateModified: WIP
+tags:
+  - SQL
+  - PostgreSQL
+  - Performance
+keywords:
+  - SQL
+  - Index
+  - Tuning
+  - Performance
+genre: software development
+---
+
+```sql
+DROP TABLE product;
+
+CREATE TABLE product
+(
+    product_id SERIAL PRIMARY KEY
+    , sku VARCHAR(12) NOT NULL
+    , available_inventory INT NOT NULL
+);
+
+INSERT INTO product (sku, available_inventory)
+SELECT
+    LEFT(uuid_generate_v4()::TEXT, 12)
+    , FLOOR(random() * 201)::INT
+FROM generate_series(1,1000000);
+
+DROP INDEX idx_product_available_inventory
+
+CREATE INDEX idx_product_available_inventory
+ON public.product USING btree
+(available_inventory ASC)
+TABLESPACE pg_default;
+
+select count(1) from product where available_inventory = 0
+
+-- Index 645.9..645.91 , less than 0.5ms
+-- No Index cost=1465.93..1465.94 , 9.499 ms
+
+select count(*), available_inventory from product
+group by available_inventory
+order by available_inventory
+
+
+UPDATE product p
+SET available_inventory = available_inventory - 1
+WHERE p.product_id = 1239
+
+-- No Index cost=0.42..8.45 actual=0.031..0.031
+-- Index
+
+WITH product_update AS (
+   SELECT product_id
+   FROM product
+   LIMIT  1000
+)
+
+UPDATE product p
+SET available_inventory = available_inventory - 1
+FROM product_update pu
+WHERE p.product_id = pu.product_id
+
+-- actual=0.031..0.031
+
+-- Index cost=1767.74..1767.75
+-- No Index const=2137..2137.01
+
+```
