@@ -21,7 +21,6 @@ export default ({ data }) => {
       }
     }
   } = data;
-  console.log(text);
   useEffect(() => {
     Prism.highlightAll();
   });

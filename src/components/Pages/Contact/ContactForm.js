@@ -22,7 +22,6 @@ const MailSignUp = () => {
 
   const onSubmit = values => {
     setIsLoading(true);
-    console.log(values);
 
     setTimeout(() => {
       setSuccess(true);

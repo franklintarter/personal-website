@@ -1,8 +1,8 @@
 ---
 title: SQL Index Introduction
-description: What are the implications of using a CTE instead of a subquery?
-datePublished: 2020-02-01
-dateModified: 2020-02-01
+description: Let's use a classic analogy to understand the motivation for adding indexes.
+datePublished: 2020-01-31
+dateModified: 2020-01-31
 tags:
   - SQL
   - Indexes
@@ -24,18 +24,18 @@ We are in charge of a phone book. People ask for information from the book in va
 
 The book is one long list of entries. Each entry has three columns: firstname, lastname, and phone number.
 
-```markdown
-    | firstname | lastname | phone_number |
-    |-----------|----------|--------------|
-    | Delores   | O'Neil   | 555-555-1234 |
-    | Avni      | Huber    | 555-555-2345 |
-    | ...       | ...      | ...          |
-    | Devin     | Graham   | 555-555-3456 |
+```
+| firstname | lastname | phone_number |
+| --------- | -------- | ------------ |
+| Delores   | O'Neil   | 555-555-1234 |
+| Avni      | Huber    | 555-555-2345 |
+| ...       | ...      | ...          |
+| Devin     | Graham   | 555-555-3456 |
 ```
 
 The book is not sorted. When we create new entries we stick them at the end of the last page.
 
-### Find
+### Requests
 
 The most common request is – get a phone number for a given person's name. With an unsorted book we have to scan the phone book from the beginning until we find a name match.
 
@@ -43,7 +43,7 @@ If they're on the first page, it's quick. If they're on the last page, it takes 
 
 We can't read any faster but we could read fewer pages. So we sort the book's entries in alphabetical order by lastname, then by firstname. Now we can seek the sorted names to find the matching one. No more reading the whole phone book for lookups. We found a huge performance gain.
 
-```markdown
+```
 | lastname | firstname | phone_number |
 | -------- | --------- | ------------ |
 | Aaberg   | ...       | 555-555-1234 |
@@ -65,7 +65,7 @@ Another common request is – someone gives their name and asks to be removed fr
 
 ### Inserts
 
-People need to be added to the book. When our book was unsorted we could add them to the end of the book without thinking about where to put them. Since it's sorted we need to determine the right place to put them. This is the first request that is harder than it used to be. It's not a lot harder, but it is harder.
+People need to be added to the book. When our book was unsorted we simply added them to the end. Since it's sorted we need to determine the right place to put them. This is the first request that is harder than it used to be. It's not a lot harder, but it is harder.
 
 ### Was the Sorting Worth It?
 
@@ -75,11 +75,11 @@ Real-world jobs (or apps) have more than four obvious tasks. Let's simulate that
 
 ### Other Use Cases
 
-Someone is doing a report and wants to know how many people in the area have the firstname Sam. Lastname → firstname sorting isn't any help here. We have to go back to reading the whole phone book, counting every time we see the firstname Sam. Can we speed up this query?
+Someone is doing a report and wants to know how many people in the area have the firstname Sam. Lastname, firstname sorting isn't any help here. We have to go back to reading the whole phone book, counting every time we see the firstname Sam. Can we speed up this query?
 
 If we sorted the book by firstname we could be quicker. We could seek to where Sam started and then stop counting when we saw the first non-Sam.
 
-```markdown
+```
 | firstname | lastname | phone_number |
 | --------- | -------- | ------------ |
 | Sal       | ...      | 555-555-1234 |
@@ -97,7 +97,7 @@ We've made the book more useful. It still supports our common queries and also t
 
 Word has gotten around that we will answer all kinds of report questions. We're now asked lastname based queries. For example – how many people have the last name where the first two letters are JO. Can we accommodate these lastname requests?
 
-We could switch sorting back to lastname → firstname but that makes our firstname queries slow again. The book can't be sorted by both firstname → lastname and lastname → firstname at the same time. We have two query types that are at odds with how the data is sorted. But the book can only be sorted one way or the other.
+We could switch sorting back to lastname, firstname but that makes our firstname queries slow again. The book can't be sorted by both firstname, lastname and lastname, firstname at the same time. We have two query types that need different sorting to be efficient. But the book can only be sorted one way or the other.
 
 ### Multiple Books
 
@@ -105,13 +105,15 @@ We can't have one physical book sorted in two different ways at once but we coul
 
 Now we've got a pretty quick response for various report requests coming in. Let's say we get up to five book copies all sorted differently that cover the variety of queries.
 
+All requests that are read-only – not updating, deleting or inserting – are very efficient.
+
 ### Trade-offs of Multiple Books
 
-There are several downsides to having all these books. The obvious one is needing more shelf space (storage). That's not too bad though because storage is pretty cheap. But there's a more troublesome downside.
+There are several downsides to having all these books. The obvious one is needing more shelf space – storage. That's not too bad though because storage is pretty cheap. But there's a more troublesome downside.
 
-Remember people need their info updated, they need it added, and they need it removed. We have to keep all copies of the phone book current. We also need to maintain the sorting in each. Any change data request becomes slower and more difficult with each copy.
+What about requests that are not read-only, the updates, deletes and inserts? We have to keep all copies of the phone book current, so the task happens for each book. We also need to maintain the sorting in each. Any change request becomes slower and more difficult with each copy.
 
-The other queries get slower too. Basic lookups must wait until we finish updates to ensure accuracy. The request queue is piling up.
+Because we are just one person we can only do one task at a time. Basic lookup requests must wait until we finish updates to ensure accuracy. Depending on the number of update requests the queue can get very long. Quick, read-only requests are blocked and waiting. It doesn't matter if the actual task is efficient, total time includes wait time in the real world.
 
 ### Screeching to a Halt
 
@@ -126,3 +128,5 @@ The phone book example illustrates how many databases end up. I chose a reportin
 Sometimes there's an easy win. We saw that when we changed the lastname first sorting to firstnames first. It kept support for the core users and added support for report queries with no downside. But at some point, we optimized for reporting purposes that were at odds with our main purpose.
 
 We need a sound approach to indexing. We want to determine the value of an index and understand its true cost. For now, the takeaway is there's no such thing as a "good" index in a vacuum. An index is only good or bad in the context of the whole application, including all DB queries.
+
+Next we'll talk about a wholistic approach, techniques to find index opportunities and how to balance tradeoffs.
