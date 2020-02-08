@@ -20,3 +20,4 @@ yarn develop
   - Replace `static/img/mark.png` - this file is used to generate icons
   - Replace `static/favicon.ico`
 - Replace favicon assets
+- Main image doesn't look good on as Twitter card
