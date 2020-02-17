@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "gatsby";
 import { SEO, useSEO } from "gatsby-plugin-seo";
-import { useArticles } from "../hooks";
 import Layout from "../components/Layout";
+import { useArticles } from "../hooks";
 
 const ArticlePreview = ({ title, description, slug, tags }) => {
   const tagEls = tags.map(t => (
