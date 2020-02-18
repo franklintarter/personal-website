@@ -16,7 +16,8 @@ export default ({ data }) => {
     }
   } = data;
 
-  // console.log(data);
+  console.log(data);
+
   return (
     <Layout>
       <SEO
@@ -35,6 +36,30 @@ export default ({ data }) => {
       </h1>
       <P>{frontmatter.description}</P>
       <AnimatedWindow />
+      <div className="mt-12">
+        <p className="font-sans font-bold text-lg text-gray-800">
+          Running Time
+        </p>
+        <p className="text-brand-gray font-serif text-2xl font-italic">
+          {frontmatter.runningTime}
+        </p>
+      </div>
+      <div className="mt-12">
+        <p className="font-sans font-bold text-lg text-gray-800">
+          Data Structures
+        </p>
+        {frontmatter.dataStructures.map(ds => (
+          <p className="text-brand-gray font-serif text-2xl font-italic">
+            {ds}
+          </p>
+        ))}
+      </div>
+      <div className="mt-12">
+        <p className="font-sans font-bold text-lg text-gray-800">Constraints</p>
+        <p className="text-brand-gray font-serif text-xl">
+          {frontmatter.constraints}
+        </p>
+      </div>
     </Layout>
   );
 };
