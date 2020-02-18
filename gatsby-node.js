@@ -3,6 +3,9 @@ const { createFilePath } = require("gatsby-source-filesystem");
 const { fmImagesToRelative } = require("gatsby-remark-relative-images");
 
 const articleTemplate = path.resolve(`src/templates/article.js`);
+const animatedAlgorithmTemplate = path.resolve(
+  `src/templates/animated-algorithm.js`
+);
 
 // exports.createPages = () => {};
 
@@ -38,16 +41,38 @@ exports.createPages = async ({ graphql, actions }) => {
         }
       }
     `
-    // { limit: 1000 }
   );
-
-  // if (result.errors) {
-  //   throw result.errors;
-  // }
 
   result.data.articles.nodes.forEach(({ name, id }) => {
     createPage({ path: name, component: articleTemplate, context: { id } });
   });
+
+  const aaResult = await graphql(
+    `
+      query articlesQuery {
+        animatedAlgorithms: allFile(
+          filter: { sourceInstanceName: { eq: "animated-algorithms" } }
+        ) {
+          nodes {
+            name
+            id
+          }
+        }
+      }
+    `
+  );
+
+  aaResult.data.animatedAlgorithms.nodes.forEach(({ name, id }) => {
+    createPage({
+      path: name,
+      component: animatedAlgorithmTemplate,
+      context: { id }
+    });
+  });
+
+  // if (result.errors) {
+  //   throw result.errors;
+  // }
 
   // Create blog post pages.
   // result.data.allMarkdownRemark.edges.forEach(edge => {
