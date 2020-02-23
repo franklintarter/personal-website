@@ -19,6 +19,7 @@ module.exports = {
         "brand-gray": "#48426b",
         "brand-light-gray": "#988cdc",
         "brand-light": "#9f97d1",
+        "brand-faded": "#6a6392",
         body: "#040404"
       },
       spacing: {
@@ -55,8 +56,28 @@ module.exports = {
       const newUtilities = {
         ".transition": {
           transition: "all .15s ease-in-out"
+        },
+        ".neo-glow": {
+          // "border-radius": "45px",
+          // background: "linear-gradient(145deg, #dbd9e5, #ffffff)",
+          background: "F3F1FE",
+          "box-shadow": "8px 8px 16px #d1cfda, -8px -8px 16px #ffffff;"
         }
+        // ".neo-glow": {
+        //   "border-radius": "45px",
+        //   background: "#F3F1FE",
+        //   "box-shadow":
+        //     "inset 8px 8px 16px #d1cfda, inset -8px -8px 16px #ffffff"
+        // }
       };
+
+      // border-radius: 55px;
+      // background: #F3F1FE;
+      // box-shadow:  24px 24px 49px #9e9da5,
+      //              -24px -24px 49px #ffffff;
+
+      // inset 8px 8px 16px #d1cfda,
+      //       inset -8px -8px 16px #ffffff;
 
       addUtilities(newUtilities);
     }
