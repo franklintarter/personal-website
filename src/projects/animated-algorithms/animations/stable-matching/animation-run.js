@@ -227,7 +227,7 @@ export default class StableMatching extends AnimationRun {
       fillStyle: "#fdfdfd",
       antialias: true
     });
-    mesh.position.set(-30, 50, 0);
+    mesh.position.set(-30, 140, 0);
     mesh.material.color.setHex(colors.darkorange);
     return mesh;
   };
@@ -241,7 +241,7 @@ export default class StableMatching extends AnimationRun {
     });
     mesh.position.set(60, 0, 0);
     mesh.material.color.setHex(colors.darkorange);
-    mesh.position.y = this.calculateBoxPosition(pos) + 45;
+    mesh.position.y = this.calculateBoxPosition(pos) + 140;
     mesh.name = `${appName}:${name}`;
     return mesh;
   };
