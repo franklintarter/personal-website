@@ -2,7 +2,8 @@ import React from "react";
 import { SEO, useSEO } from "gatsby-plugin-seo";
 import { graphql } from "gatsby";
 import { P } from "../components/Typography";
-import AnimatedWindow from "../components/UI/AnimatedWindow";
+// import AnimatedWindow from "../projects/animated-algorithms/components/AnimatedWindow";
+import AnimatedAlgorithm from "../projects/animated-algorithms/components/AnimatedAlgorithm";
 
 import Layout from "../components/Layout";
 
@@ -35,7 +36,7 @@ export default ({ data }) => {
         </span>
       </h1>
       <P>{frontmatter.description}</P>
-      <AnimatedWindow />
+      <AnimatedAlgorithm />
       <div className="mt-12">
         <p className="font-sans font-bold text-lg text-gray-800">
           Running Time
@@ -49,7 +50,10 @@ export default ({ data }) => {
           Data Structures
         </p>
         {frontmatter.dataStructures.map(ds => (
-          <p className="text-brand-gray font-serif text-2xl font-italic">
+          <p
+            key={ds}
+            className="text-brand-gray font-serif text-2xl font-italic"
+          >
             {ds}
           </p>
         ))}

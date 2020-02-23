@@ -57,7 +57,7 @@ module.exports = {
           transition: "all .15s ease-in-out"
         },
         ".neo-glow": {
-          "border-radius": "45px",
+          // "border-radius": "45px",
           // background: "linear-gradient(145deg, #dbd9e5, #ffffff)",
           background: "F3F1FE",
           "box-shadow": "8px 8px 16px #d1cfda, -8px -8px 16px #ffffff;"
