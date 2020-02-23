@@ -229,6 +229,8 @@ export default class StableMatching extends AnimationRun {
       antialias: true
     });
     mesh.position.set(-30, 140, 0);
+    // mesh.position.set(-30, 0, 0);
+    // mesh.position.set(-30, 70, 0);
     mesh.material.color.setHex(colors.darkorange);
     return mesh;
   };

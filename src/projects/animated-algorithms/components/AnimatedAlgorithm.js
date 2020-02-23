@@ -124,7 +124,11 @@ export default ({ algorithmName }) => {
         className="neo-glow mt-4 flex items-center justify-center"
         style={{ marginLeft: "-1rem", marginRight: "-1rem" }}
       >
-        <div id="three-container" ref={threeContainer} />
+        <div
+          style={{ lineHeight: 0 }}
+          id="three-container"
+          ref={threeContainer}
+        />
       </div>
     </>
   );
