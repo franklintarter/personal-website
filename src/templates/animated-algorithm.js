@@ -1,9 +1,9 @@
 import React from "react";
 import { SEO, useSEO } from "gatsby-plugin-seo";
 import { graphql } from "gatsby";
-import { P } from "../components/Typography";
-// import AnimatedWindow from "../projects/animated-algorithms/components/AnimatedWindow";
-import AnimatedAlgorithm from "../projects/animated-algorithms/components/AnimatedAlgorithm";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import { MDXProvider } from "@mdx-js/react";
+import { P, MdxComponentMap } from "../components/Typography";
 
 import Layout from "../components/Layout";
 
@@ -31,12 +31,13 @@ export default ({ data }) => {
             }`}
       />{" "}
       <h1 className="font-light leading-none tracking-wider">
-        <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
+        <span className="sm:text-5xl text-3xl font-serif text-brand-gray italic">
           {frontmatter.title}
         </span>
       </h1>
-      <P>{frontmatter.description}</P>
-      <AnimatedAlgorithm algorithmName={frontmatter.name} />
+      <MDXProvider components={MdxComponentMap}>
+        <MDXRenderer>{body}</MDXRenderer>
+      </MDXProvider>
       <div className="mt-12">
         <p className="font-sans font-bold text-lg text-gray-800">
           Running Time

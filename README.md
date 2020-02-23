@@ -21,3 +21,4 @@ yarn develop
   - Replace `static/favicon.ico`
 - Replace favicon assets
 - Main image doesn't look good on as Twitter card
+- SEO for algorithms/projects
