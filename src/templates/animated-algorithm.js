@@ -59,12 +59,16 @@ export default ({ data }) => {
           </p>
         ))}
       </div>
-      <div className="mt-12">
-        <p className="font-sans font-bold text-lg text-gray-800">Constraints</p>
-        <p className="text-brand-gray font-serif text-xl">
-          {frontmatter.constraints}
-        </p>
-      </div>
+      {frontmatter.constraints && (
+        <div className="mt-12">
+          <p className="font-sans font-bold text-lg text-gray-800">
+            Constraints
+          </p>
+          <p className="text-brand-gray font-serif text-xl">
+            {frontmatter.constraints}
+          </p>
+        </div>
+      )}
     </Layout>
   );
 };
