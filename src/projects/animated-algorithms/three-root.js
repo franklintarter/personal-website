@@ -12,7 +12,6 @@ export default function AnimatedAlgorithm({ element }) {
   this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
 
   this.element = element;
-  // this.renderer.domElement.style.borderRadius = "45px";
   this.scene = new THREE.Scene();
 
   element.appendChild(this.renderer.domElement);
@@ -39,7 +38,6 @@ export default function AnimatedAlgorithm({ element }) {
 
   const light2 = new THREE.AmbientLight(0x404040, 0.95); // soft white light
   const light = new THREE.DirectionalLight(0xffffff, 0.95); // soft white light
-  // const light2 = new THREE.SpotLight(0x606060, 7, 2000)
 
   light.position.set(100, 100, 400);
   light2.position.set(50, 500, 400);

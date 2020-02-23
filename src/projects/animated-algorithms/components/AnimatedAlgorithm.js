@@ -4,11 +4,10 @@ import AnimatedAlgorithm from "../three-root";
 import getAnimation from "../get-animation";
 import "rc-slider/assets/index.css";
 
-const IndexPage = () => {
+export default ({ algorithmName }) => {
   const [speed, setSpeed] = useState(5);
   const [paused, setPaused] = useState(false);
   const [size, setSize] = useState(15);
-  const [alg, setAlg] = useState("STABLE_MATCHING");
 
   const [loaded, setLoaded] = useState(false);
   const threeContainer = useRef(null);
@@ -40,7 +39,7 @@ const IndexPage = () => {
         animationRun.dispose();
       }
 
-      const nextRun = getAnimation(alg, threeRoot, {
+      const nextRun = getAnimation(algorithmName, threeRoot, {
         n: size,
         min: 3,
         max: 20
@@ -60,6 +59,12 @@ const IndexPage = () => {
   };
 
   useEffect(() => {
+    if (loaded) {
+      startAlgorithm();
+    }
+  }, [loaded]);
+
+  useEffect(() => {
     const root = new AnimatedAlgorithm({
       element: threeContainer.current
     });
@@ -75,48 +80,52 @@ const IndexPage = () => {
 
   return (
     <>
-      <div style={{ width: "4rem" }}>
-        <Slider
-          value={speed}
-          onChange={val => changeSpeed(val)}
-          min={1}
-          max={10}
-        />
+      <div className="flex justify-between mt-6 items-center">
+        <div className="w-32 flex flex-col">
+          <span className="text-lg text-center mb-1">Speed</span>
+          <Slider
+            value={speed}
+            onChange={val => changeSpeed(val)}
+            min={1}
+            max={10}
+          />
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={randomize}
+            className="mr-4 bg-brand-faded hover:bg-brand-gray transition text-white font-bold py-1 px-2 rounded"
+          >
+            Restart
+          </button>
+          <button
+            onClick={togglePause}
+            type="button"
+            className="bg-brand-faded w-24 hover:bg-brand-gray transition text-white font-bold py-1 px-2 rounded"
+          >
+            {paused ? "Play" : "Pause"}
+          </button>
+        </div>
+        {/* <button > */}
+
+        {/* <button type="button" onClick={randomize} className="p-4 bg-brand"> */}
       </div>
-      <button type="button" onClick={randomize}>
-        Randomize
-      </button>
-      <button onClick={togglePause} type="button">
-        {paused ? "unpause" : "pause"}
-      </button>
-      <input
+      {/* <input
         value={speed}
         type="number"
         onChange={e => changeSpeed(e.target.value)}
-      />
-      <input
+      /> */}
+      {/* <input
         value={size}
         type="number"
         onChange={e => setSize(e.target.value)}
-      />
-      <select value={alg} onChange={e => setAlg(e.target.value)}>
-        <option value="STABLE_MATCHING">Stable Matching</option>
-        <option value="BUBBLE_SORT">Bubble Sort</option>
-        <option value="SELECTION_SORT">Selection Sort</option>
-      </select>
-      <div className="mt-8">
-        <div
-          className="neo-glow mt-8 flex items-center justify-center"
-          style={{ marginLeft: "-1rem", marginRight: "-1rem" }}
-        >
-          {/* <div className="neo-glow p-6 mt-8 h-64 flex items-center justify-center"> */}
-          {/* <h2 className="text-brand-gray text-5xl font-serif">Animation</h2> */}
-          {/* <AnimatedAlgorithm /> */}
-          <div id="three-container" ref={threeContainer} />
-        </div>
+      /> */}
+      <div
+        className="neo-glow mt-4 flex items-center justify-center"
+        style={{ marginLeft: "-1rem", marginRight: "-1rem" }}
+      >
+        <div id="three-container" ref={threeContainer} />
       </div>
     </>
   );
 };
-
-export default IndexPage;

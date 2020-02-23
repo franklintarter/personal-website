@@ -36,7 +36,7 @@ export default ({ data }) => {
         </span>
       </h1>
       <P>{frontmatter.description}</P>
-      <AnimatedAlgorithm />
+      <AnimatedAlgorithm algorithmName={frontmatter.name} />
       <div className="mt-12">
         <p className="font-sans font-bold text-lg text-gray-800">
           Running Time
@@ -81,6 +81,7 @@ export const query = graphql`
           runningTime
           dataStructures
           constraints
+          name
         }
       }
     }

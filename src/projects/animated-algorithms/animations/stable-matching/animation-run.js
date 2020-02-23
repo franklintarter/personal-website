@@ -64,8 +64,9 @@ export default class StableMatching extends AnimationRun {
   };
 
   calculateCameraPosition = ({ n }) => {
-    const z = n * (this.LETTER_HEIGHT + this.LETTER_Y_SPACING) * 1.5;
-    const y = -(n * (this.LETTER_HEIGHT + this.LETTER_Y_SPACING)) / 3;
+    const z = n * (this.LETTER_HEIGHT + this.LETTER_Y_SPACING);
+    const y =
+      -(1.2 * n * (this.LETTER_HEIGHT + this.LETTER_Y_SPACING)) / 3 - 50;
     return new THREE.Vector3(this.CONTAINER_WIDTH * 1.5, y, z);
   };
 

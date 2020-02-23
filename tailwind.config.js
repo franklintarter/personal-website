@@ -19,6 +19,7 @@ module.exports = {
         "brand-gray": "#48426b",
         "brand-light-gray": "#988cdc",
         "brand-light": "#9f97d1",
+        "brand-faded": "#6a6392",
         body: "#040404"
       },
       spacing: {
