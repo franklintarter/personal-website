@@ -10,11 +10,11 @@ export default class AnimationRun {
     this.cancellationToken = { cancelled: false };
   }
 
-  createAnimation() {
+  createAnimation(stepSubscriber) {
     const ds = this.createDataSet(this.opts);
     const { meshes, steps } = this.runAlgorithm(ds);
     const cameraPosition = this.calculateCameraPosition(this.opts);
-    const runAnimation = this.reduceAnimationPromises(steps);
+    const runAnimation = this.reduceAnimationPromises(steps, stepSubscriber);
     this.threeRoot.setCameraPosition(cameraPosition);
     this.threeRoot.setMesh(meshes);
     return runAnimation;
@@ -109,9 +109,10 @@ export default class AnimationRun {
 
   ROW_SPACING_X = 160;
 
-  reduceAnimationPromises = steps => () => {
+  reduceAnimationPromises = (steps, stepSubscriber) => () => {
     steps.reduce(async (previousPromise, step) => {
       await previousPromise;
+      stepSubscriber(step.name);
       return this.doOrCancel(() => this.reduceSteps(step));
     }, Promise.resolve());
   };
