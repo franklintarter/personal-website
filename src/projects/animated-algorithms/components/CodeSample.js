@@ -5,7 +5,7 @@ import LineHighlight from "./prism-highlight";
 const getLines = (codeLines, stepName) => {
   const lines = [];
   codeLines.forEach((line, i) => {
-    if (line.step === stepName) {
+    if (line.step.includes(stepName)) {
       lines.push(i + 2);
     }
   });

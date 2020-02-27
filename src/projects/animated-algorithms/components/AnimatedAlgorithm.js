@@ -102,6 +102,11 @@ export default ({ algorithmName }) => {
           <CodeSample codeLines={animationRun.code} stepName={currentStep} />
         )}
       </div>
+      {/* <div>
+        {animationReady && (
+          <CodeSample codeLines={animationRun.code} stepName={currentStep} />
+        )}
+      </div> */}
       <div className="flex justify-between mt-4 mb-12 items-center xs:flex-row flex-col select-none">
         <div className="w-32 flex flex-col mb-6 xs:mb-0 py-2 xs:py-0">
           <span className="text-lg text-center mb-1 text-gray-800">Speed</span>

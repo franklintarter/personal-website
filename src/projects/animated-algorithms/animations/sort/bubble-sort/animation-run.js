@@ -34,7 +34,7 @@ export default class BubbleSort extends AnimationRun {
           swapped = true;
         } else if (i < items.length - 1) {
           steps.push({
-            name: "NOSWAP",
+            name: "NO",
             b: items[i],
             a: items[i + 1]
           });
@@ -57,7 +57,7 @@ export default class BubbleSort extends AnimationRun {
     { step: "", text: "    swapped = false;" },
     { step: "", text: "    for (let i = 0; i < n; i++) {" },
     {
-      step: "SWAP",
+      step: "SWAP NO",
       text: "      if (arr[i] > arr[i + 1]) {"
     },
     { step: "SWAP", text: "        const temp = arr[i];" },
@@ -66,7 +66,7 @@ export default class BubbleSort extends AnimationRun {
     { step: "SWAP", text: "        swapped = true;" },
     { step: "SWAP", text: "      }" },
     { step: "", text: "    }" },
-    { step: "NOSWAP", text: "  // else { // no swap }  " },
+    { step: "NO", text: "  // else { // no swap }  " },
     { step: "", text: "  } while (swapped);" },
     { step: "SORTED", text: "  return arr;" },
     { step: "", text: "}" }
@@ -103,7 +103,7 @@ export default class BubbleSort extends AnimationRun {
       case "SWAP":
         await this.swap(step);
         break;
-      case "NOSWAP":
+      case "NO":
         await this.noSwap(step);
         break;
       case "SORTED":
