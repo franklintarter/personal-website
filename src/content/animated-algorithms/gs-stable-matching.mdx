@@ -1,27 +1,27 @@
 ---
 title: GS Stable Matching
-description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+description: Bubble sort compares all adjacent values in an array from beginning to end. If compared values are out of order it swaps them. It repeats the process until it goes through the entire array without doing any swaps.
 runningTime: O(n^2)
 dataStructures:
-  - Array – Applicant Preferences
-  - Array – Employer Preferences
-  - Heap – Ranking Matrix
-constraints: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - Array – Values
 keywords:
-  - Gale-Shapely
-  - Stable Matching
-name: STABLE_MATCHING
+  - Bubble Sort
+  - Sort
+  - Algorithm
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+import AnimatedAlgorithm from "../../projects/animated-algorithms/components/AnimatedAlgorithm";
 
-<!-- - Algo
-  - Animations (x)
-  - Mesh Creation (x)
-  - Content ()
-  - Algorithm ()
-  - Param Generation (x)
-  - Animation Reducer (x)
-  - Presets ()
-    - Worst Case ()
-    - Best Case () -->
+The Stable Matching Problem (aka SMP or Stable Marriage) is a problem where two equally sized sets need to be matched. Each item in a set has a preference of which item in the opposite set to be matched to.
+
+Take a set of Applicants and a set of Jobs. The number of Applicants and Jobs are equal. Each Applicant has a preference list of all Jobs. Each Job has a preference list of all Applicants.
+
+We desire a stable match of Applicants and Jobs. Stability means that matchings will not change, there is no possibility for an Applicant-Job pairing to change.
+
+We can achieve stability by making sure each Applicant is matched with best Job possible (highest on the preference). This doesn't mean that an Applicant will get the top Job, or even a Job high on their preference list. It means they will the highest Job available to them.
+
+If a Job is desirable to two Applicants, the Job will prefer one Applicant over the other. The Job accepts the better Applicant, and the rejected Applicant must seek the next Job on their preference list.
+
+<AnimatedAlgorithm algorithmName="STABLE_MATCHING" />
+
+You won't find Bubble Sort used in libraries because it's so inefficient. Its only upside is the simplicity to write it. Because of its simplicity it is used to teach the basics of sorting.

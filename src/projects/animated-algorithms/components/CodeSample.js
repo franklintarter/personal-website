@@ -13,23 +13,20 @@ const getLines = (codeLines, stepName) => {
 };
 
 export default ({ codeLines, stepName }) => {
-  useEffect(() => {
-    Prism.highlightAll();
-    LineHighlight();
-  });
   const lines = getLines(codeLines, stepName);
+  useEffect(() => {
+    if (lines !== "") {
+      Prism.highlightAll();
+      LineHighlight();
+      console.log("eff");
+    }
+  });
   return (
     <div className="text-xs">
       <pre data-line={lines}>
         <code className="language-javascript">
           {codeLines.map(l => {
-            // const highlight = l.step === stepName ? " // highlight-line" : "";
-            return (
-              //   <p className={className} key={l.text}>
-              //   </p>
-              //   `${l.text} ${highlight}\n`
-              `${l.text}\n`
-            );
+            return `${l.text}\n`;
           })}
         </code>
       </pre>

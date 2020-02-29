@@ -421,4 +421,100 @@ export default class StableMatching extends AnimationRun {
       steps
     };
   };
+
+  runAlgorithmAlt = ({ applicants, jobs }) => {
+    // Create Job Preferences Ranking Matrix
+    jobs.forEach(job => {
+      job.rank = {};
+      job.prefs.forEach((pref, i) => {
+        job.rank[pref.name] = i;
+      });
+    });
+
+    while (applicants.length > 0) {
+      const applicant = applicants.shift();
+      const job = applicant.prefs.shift();
+
+      if (job.stagedApplicant === undefined) {
+        job.stagedApplicant = applicant;
+      } else {
+        const { stagedApplicant } = job;
+        const stagedApplicantRank = job.rank[stagedApplicant.name];
+        const applicantRank = job.rank[applicant.name];
+        if (applicantRank < stagedApplicantRank) {
+          applicants.unshift(stagedApplicant);
+          job.stagedApplicant = applicant;
+        } else {
+          applicants.unshift(applicant);
+        }
+      }
+    }
+    return jobs;
+  };
+
+  code = [
+    { step: "", text: "function findStableMatch({ applicants, jobs }) {" },
+    { step: "", text: "  // Create Job Preferences Ranking Matrix" },
+    { step: "", text: "  jobs.forEach(job => {" },
+    { step: "", text: "    job.rank = {};" },
+    { step: "", text: "    job.prefs.forEach((pref, i) => {" },
+    { step: "", text: "      job.rank[pref.name] = i;" },
+    { step: "", text: "    });" },
+    { step: "", text: "  });" },
+    { step: "", text: "  " },
+    {
+      step: "",
+      text: "  while (applicants.length > 0) { // while any applicant available"
+    },
+    { step: "", text: "    // start applying" },
+    { step: "", text: "    const applicant = applicants.shift();" },
+    { step: "", text: "    const job = applicant.prefs.shift();" },
+    { step: "", text: "    " },
+    {
+      step: "JOB_OPEN",
+      text: "    if (job.stagedApplicant === undefined) {"
+    },
+    { step: "JOB_OPEN", text: "      // job was open" },
+    { step: "JOB_OPEN", text: "      job.stagedApplicant = applicant;" },
+    {
+      step: "JOB_ACCEPTED JOB_REJECTED",
+      text: "    } else {"
+    },
+    {
+      step: "JOB_ACCEPTED JOB_REJECTED",
+      text: "      // job filled, applicants need to be compared"
+    },
+    {
+      step: "",
+      text: "      const { stagedApplicant } = job;"
+    },
+    {
+      step: "",
+      text: "      const stagedApplicantRank = job.rank[stagedApplicant.name];"
+    },
+    {
+      step: "",
+      text: "      const applicantRank = job.rank[applicant.name];"
+    },
+    {
+      step: "JOB_ACCEPTED",
+      text: "      if (applicantRank < stagedApplicantRank) {"
+    },
+    {
+      step: "JOB_ACCEPTED",
+      text: "        // new applicant accepted"
+    },
+    {
+      step: "JOB_ACCEPTED",
+      text: "        applicants.unshift(stagedApplicant);"
+    },
+    { step: "JOB_ACCEPTED", text: "        job.stagedApplicant = applicant;" },
+    { step: "JOB_REJECTED", text: "      } else { // new applicant rejected" },
+    { step: "JOB_REJECTED", text: "        applicants.unshift(applicant);" },
+    { step: "JOB_REJECTED", text: "      }" },
+    { step: "", text: "    }" },
+    { step: "", text: "  } " },
+    { step: "", text: "  return jobs;" },
+    { step: "", text: "};" }
+  ];
 }

@@ -17,8 +17,6 @@ export default ({ data }) => {
     }
   } = data;
 
-  console.log(data);
-
   return (
     <Layout>
       <SEO
@@ -59,7 +57,7 @@ export default ({ data }) => {
           </p>
         ))}
       </div>
-      {frontmatter.constraints && (
+      {/* {frontmatter.constraints && (
         <div className="mt-12">
           <p className="font-sans font-bold text-lg text-gray-800">
             Constraints
@@ -68,7 +66,7 @@ export default ({ data }) => {
             {frontmatter.constraints}
           </p>
         </div>
-      )}
+      )} */}
     </Layout>
   );
 };
@@ -85,8 +83,6 @@ export const query = graphql`
           keywords
           runningTime
           dataStructures
-          constraints
-          name
         }
       }
     }

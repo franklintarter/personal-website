@@ -50,7 +50,7 @@ export default class BubbleSort extends AnimationRun {
   }
 
   code = [
-    { step: "", text: "bubbleSort(arr) {" },
+    { step: "", text: "function bubbleSort(arr) {" },
     { step: "", text: "  let swapped;" },
     { step: "", text: "  const n = arr.length - 1;" },
     { step: "", text: "  do {" },
