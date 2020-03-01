@@ -221,30 +221,26 @@ export default class StableMatching extends AnimationRun {
     return containerMesh;
   };
 
-  createTextMesh = ({ name }) => {
-    const mesh = new MeshText2D(name, {
-      align: textAlign.left,
-      font: "55px Arial",
-      fillStyle: "#fdfdfd",
-      antialias: true
-    });
-    mesh.position.set(-30, 140, 0);
-    // mesh.position.set(-30, 0, 0);
-    // mesh.position.set(-30, 70, 0);
-    mesh.material.color.setHex(colors.darkorange);
-    return mesh;
-  };
-
   createPrefTextMesh = ({ appName, name, pos }) => {
     const mesh = new MeshText2D(name, {
-      align: textAlign.right,
-      font: "55px Arial",
+      align: textAlign.bottomRight,
+      font: "3.4375rem Arial",
       fillStyle: "#fdfdfd",
       antialias: true
     });
+
+    let yOffset;
+    if (window.devicePixelRatio === 2) {
+      yOffset = 350;
+    } else if (window.devicePixelRatio === 3) {
+      yOffset = 285;
+    } else {
+      yOffset = 350;
+    }
+
     mesh.position.set(60, 0, 0);
     mesh.material.color.setHex(colors.darkorange);
-    mesh.position.y = this.calculateBoxPosition(pos) + 140;
+    mesh.position.y = this.calculateBoxPosition(pos) - yOffset;
     mesh.name = `${appName}:${name}`;
     return mesh;
   };
@@ -269,9 +265,36 @@ export default class StableMatching extends AnimationRun {
     return group;
   };
 
+  createTextMesh = ({ name }) => {
+    const mesh = new MeshText2D(name, {
+      align: textAlign.bottomLeft,
+      font: "3.4375rem Arial",
+      fillStyle: "#fdfdfd",
+      antialias: true
+    });
+
+    let yOffset;
+    if (window.devicePixelRatio === 2) {
+      yOffset = 350;
+    } else if (window.devicePixelRatio === 3) {
+      yOffset = 285;
+    } else {
+      yOffset = 350;
+    }
+    // mesh.position.set(-30, 140, 0);
+    mesh.position.set(-30, -yOffset, 0);
+    // mesh.position.set(-30, 0, 0);
+    // mesh.position.set(-30, 70, 0);
+    // mesh.geometry.height = this.LETTER_HEIGHT;
+    // mesh.geometry.width = this.CONTAINER_WIDTH;
+    // mesh.position.set(0, 0, 0);
+    mesh.material.color.setHex(colors.darkorange);
+    return mesh;
+  };
+
   createApplicant = ({ initialPosition, name }) => {
     const textMesh = this.createTextMesh({ name });
-    textMesh.position.x = -12;
+    // textMesh.position.x = -12;
     const containerMesh = this.createContainerMesh();
 
     const group = new THREE.Group();
