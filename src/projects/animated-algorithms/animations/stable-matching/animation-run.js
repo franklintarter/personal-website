@@ -224,7 +224,7 @@ export default class StableMatching extends AnimationRun {
   createPrefTextMesh = ({ appName, name, pos }) => {
     const mesh = new MeshText2D(name, {
       align: textAlign.bottomRight,
-      font: "3.4375rem Arial",
+      font: "55px Arial",
       fillStyle: "#fdfdfd",
       antialias: true
     });
@@ -268,7 +268,7 @@ export default class StableMatching extends AnimationRun {
   createTextMesh = ({ name }) => {
     const mesh = new MeshText2D(name, {
       align: textAlign.bottomLeft,
-      font: "3.4375rem Arial",
+      font: "55px Arial",
       fillStyle: "#fdfdfd",
       antialias: true
     });
