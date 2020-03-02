@@ -12,6 +12,8 @@ keywords:
 genre: software development
 ---
 
+import { A, P } from "../../components/Typography";
+
 ## Why Indexes
 
 A useful index allows the database to do less work for certain queries. Developers add them to improve performance. Diagnostic tools are quick to recommend them. But they are not free. They need storage and can increase the work to update, insert, and delete rows. An index should provide more value than it costs. It should earn its keep.
@@ -129,4 +131,7 @@ Sometimes there's an easy win. We saw that when we changed the lastname first so
 
 We need a sound approach to indexing. We want to determine the value of an index and understand its true cost. For now, the takeaway is there's no such thing as a "good" index in a vacuum. An index is only good or bad in the context of the whole application, including all DB queries.
 
-Next we'll talk about a wholistic approach, techniques to find index opportunities and how to balance tradeoffs.
+<P>
+  <A to="/where-to-index">Next</A> we'll talk about a wholistic approach,
+  techniques to find index opportunities and how to balance tradeoffs.
+</P>

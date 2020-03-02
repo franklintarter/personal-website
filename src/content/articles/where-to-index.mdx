@@ -1,0 +1,124 @@
+---
+title: Where To Index
+description: A look at techniques to find hotspots and index opportunities. We'll cover some things to keep in mind to avoid over indexing, and when indexing is the wrong solution.
+datePublished: 2020-03-03
+dateModified: 2020-03-03
+tags:
+  - SQL
+  - Indexes
+keywords:
+  - SQL
+  - Indexes
+genre: software development
+---
+
+import { A } from "../../components/Typography";
+
+In the <A to="/indexes-intro">last post</A>, we covered index foundations. We used an analogy of managing a phonebook. Adding indexes improved some queries. Adding too many caused issues with updates, deletes, and inserts.
+
+Now we'll cover techniques to find index opportunities and avoid pitfalls.
+
+## Uncovering The Hotspots
+
+If it's not known which tables or queries have performance issues, step 0 is to get some monitoring in place. Use the built-in monitoring tools of the SQL engine or use a third-party service. If you can, pick a tool that shows I/O statistics, blocking queries and deadlock perps. It's not adequate to only look at execution time.
+
+We'll create a shortlist of problem queries. Then we can look at which tables those queries use. Oftentimes many of the worst queries are bad in a similar way due to how they access certain tables.
+
+## Root Cause
+
+Now we take a magnifying glass to each poor performing query starting with the worst. Find some realistic parameters to execute in a sandbox database. If we're on SQL Server we'll use SSMS and SQL Profiler to look at stats and execution plans. If we're on PostgreSQL we'll use EXPLAIN ANALYZE. Look for table scans, index scans, expensive sorts, or any other costly step.
+
+### Recommendations – A Word of Warning
+
+Many tools we use in this stage will help with analysis. Some will recommend which indexes to add, generating the index creation script for us. Do not use these as a shortcut. These recommendations are very tunnel-visioned to what we tested in our sandbox. They don't account for anything else going on in the app or DB. If used without question, indexes become bloated and create bottlenecks on updates.
+
+The recommendations are a good starting place to find generally what's wrong. But then it's up to us as the developer or DBA to put that recommendation in context. It's not guaranteed that an index is the best answer or even a good answer to the problem.
+
+## Bad Query or Missing Index
+
+> Indexes are not bandaids for bad queries.
+
+A query can return correct results but still be poorly written, working way too hard. We don't want an index to help with unnecessary work. Better to avoid that work. Before indexing make sure we don't have a bad query on our hands.
+
+### Recognizing Bad Queries
+
+It's a big topic but here's a non-exhaustive list of query flaws to look out for:
+
+- Uses `SELECT *` - There might already be a usable index but since `*` is used, it's faster to scan the table. Write out needed columns rather than \*.
+- Uses Procedural Code - If you see `CURSOR, BREAK, CONTINUE, GOTO, WHILE` you've got procedural SQL on your hands. Refactor the query to be set-based.
+- Uses `DISTINCT` - There's a good chance there's a `JOIN` problem that returns duplicates. Distinct is band-aiding the duplicate issue. Fix the real duplicate issue and remove `DISTINCT`.
+- Non-SARG-able Comparisons - This would be something like `YEAR(t.created_date) > 2019`. If there were already an index on created_date, the query could not use it because the YEAR function must grab the created_date and then compare it. 2019 cannot be traversed on the created_date index.
+- Uses OR For Optional Params - This looks like `WHERE (@param1 IS NULL OR column_1 = @param1)`. If column_1 did have a usable index, it won't be used effectively because the `@param_1 IS NULL` is hiding it from the plan.
+
+### An Anecdote About Index Obsession
+
+A database had thousands of stored procedures with performance and stability problems. The stored procedures were the cause. They were procedural style SQL with all the textbook code smells. They would chew through CPU and I/O. So much unnecessary work for simple operations.
+
+For years, the stability efforts were limited to adding indexes. This alleviated the problem short term. But as the user base grew, instability came right back and more indexes were slapped on. Eventually, the cost of maintaining the indexes became the bottleneck. Every update, insert or delete statement was very lengthy and contentious.
+
+If the code in the queries was inspected the real problems would've been obvious. There were possible rewrites that could reduce the I/O and CPU to a tiny fraction of what it had been.
+
+The index bandaids had to be peeled away carefully, making sure to not throw away any useful ones. Then the queries could be rewritten and, if needed, add an index for the properly written query. Needless to say, this was much more expensive than working on the bad queries from the start.
+
+## A Good Index
+
+The more an index is used the better. The more queries use it the better. If it's used by a frequently called query, better. If the index is used for seeking, even better. If it's used to scan that's not always bad. It could be how the query needs to work.
+
+To determine if an index will be heavily used we need to understand how the app accesses data. W*hat are the data access patterns?* We've already analyzed hot spots and rewritten some bad queries. We've gathered some working knowledge of access patterns.
+
+Now we add indexes that speed up that access. There are things we keep in mind as we do that.
+
+### Check Where and Join Predicates
+
+Predicates that will be frequently used should have indexes. This will convert scans (table or clustered index) into seeks.
+
+```sql
+CREATE NONCLUSTERED INDEX
+ON Users ( lastname )
+
+SELECT firstname, lastname
+FROM Users
+WHERE lastname = @lastname
+```
+
+### Be Considerate of Low Cardinality
+
+Low cardinality is a fancy term meaning many rows match few values. An example of low cardinality would be a status column.
+
+```sql
+SELECT user_id FROM Users WHERE is_active = 1
+```
+
+Let's say there are thousands of users in this table. But there are only two possible values, 0 and 1, for that column. The cardinality of this column is only 2. That is low cardinality.
+
+An index on is_active may seem like a great idea for this query. If this query runs over and over, there could be a case for it. But this all depends on the app.
+
+If the records were split in half the SQL engine would likely not make use of this index very often. But if a small set of users are active an index could make a ton of sense.
+
+Be considerate of low cardinality because higher cardinality is usually what you want. But there are times when a low cardinality index makes sense for the app.
+
+### Check Foreign Keys
+
+Foreign key indexes are not automatic. Foreign keys by definition are how tables join. Many queries will use foreign keys as the join predicate. A missing foreign key index can wreak havoc on a query.
+
+### Index to Save Sorting
+
+When results are frequently sorted or grouped by a column it makes sense to index on that column.
+
+### Make the Index as Useful as Possible
+
+We don't want tunnel-vision when indexing. If we worked on each query in isolation we'd create an index that met exactly the needs of the query. We would end up with as many indexes (or more) as we had queries. This is not what we want. We want hard-working indexes that support many queries.
+
+Say we have an index that works great for four queries. But by adding another column we could make it useful for four more queries. We should do it every time. Think of an index as supporting a "family" of queries rather than individual queries.
+
+## Always Measure
+
+Measuring is so important when tuning the database. At the very least all affected queries should be measured for I/O and CPU time. These automated tests should support lots of experimenting with a fast feedback loop. Ideally, these tests could simulate load to factor in contention to the tuning effort.
+
+## Next Steps
+
+Indexing is like solving other development problems. There are not general, hard and fast rules for indexing. Rather than rules, there are core concepts that we apply to specific situations – data and apps. The best way to improve is to practice. Tinkering with queries, tables, and indexes then inspecting the execution plan is the best way to practice.
+
+Beyond practice taking a bit of a deep dive under the hood of the SQL engine will also help. A basic understanding of the data structures behind indexes will give us insight into why and how the SQL engine does things a certain way. Knowing that, we'll have a better instinct for why things perform poorly and what to do about it.
+
+In the next post, we'll take that dive.
