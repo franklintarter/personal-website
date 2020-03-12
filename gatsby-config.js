@@ -123,7 +123,7 @@ module.exports = {
       resolve: "gatsby-plugin-seo",
       options: {
         siteName: "Franklin Tarter",
-        defaultSiteImage: "/img/logo.png",
+        defaultSiteImage: "/img/logo-social.png",
         siteUrl: "https://franklintarter.com",
         twitterCreator: "@franklintarter",
         twitterSite: "@franklintarter",
