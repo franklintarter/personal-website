@@ -1,6 +1,6 @@
 ---
 title: SQL Index Introduction
-description: Let's use a classic analogy to understand the motivation for adding indexes.
+description: SQL knowledge assumed but aimed at beginners to indexing. Let's build a mental model to understand how indexes help apps perform and scale.
 datePublished: 2020-01-31
 dateModified: 2020-01-31
 tags:
@@ -16,122 +16,231 @@ import { A, P } from "../../components/Typography";
 
 ## Why Indexes
 
-A useful index allows the database to do less work for certain queries. Developers add them to improve performance. Diagnostic tools are quick to recommend them. But they are not free. They need storage and can increase the work to update, insert, and delete rows. An index should provide more value than it costs. It should earn its keep.
+Why indexes? We want our apps to go faster and delight our users. Indexes, when written well, make database queries run faster and consume fewer resources. As the number of users and data in an application grow, it's crucial to have good indexing.
 
-Let's use a classic analogy to understand the motivation for adding indexes. Then let's see what happens when we add too many. With that foundational understanding, we will look into indexing in a real application.
+To get a tangible feel for how databases use indexes we'll pretend we are the database. We'll use the classic analogy of a phonebook. Let's build a mental model.
 
-## Be the Database
+## Making Plans
 
-We are in charge of a phone book. People ask for information from the book in various ways (queries). People also tell us to create, update or delete entries in the book. We are the database engine and the phone book is our table.
+When someone calls with a query, we don't read pages randomly hoping to stumble across the answer. We create a plan.
 
-The book is one long list of entries. Each entry has three columns: firstname, lastname, and phone number.
+First, we need to know what useful elements for searching are available. Is it sorted? Is there a table of contents? Are there chapters and verses?
 
+Second, we use those elements to create a few plans. If it's sorted we could skim the first word of each page. If we have a glossary we could look up the word and then go to the page number. We pick the plan that will be the least amount of work.
+
+Finally, we execute our plan. Now we actually do the lookups, thumb through the pages, and read the information.
+
+## No Good Plans
+
+It's our first day on the job and someone calls us up with a query. The comment at the top will be the English version of the request.
+
+```sql
+-- Please get me the phone number for Joe Jones.
+SELECT phone_number
+FROM phone_book
+WHERE
+  firstname = 'Joe'
+  AND lastname = 'Jones'
 ```
-| firstname | lastname | phone_number |
-| --------- | -------- | ------------ |
-| Delores   | O'Neil   | 555-555-1234 |
-| Avni      | Huber    | 555-555-2345 |
-| ...       | ...      | ...          |
-| Devin     | Graham   | 555-555-3456 |
+
+The entries in the phone book are completely random, unsorted. The best plan we can come up with is to read through the phone book until we find the person 'Joe Jones'.
+
+If 'Joe Jones' is on the first page it will be a quick query. If he's on the last page our customer will be waiting a long time for the result. If the 'Joe Jones' doesn't exist at all we'll still have to read the whole phone book to verify that he's not in it.
+
+This is a tremendous amount of work, so it's a bad plan. But with an unsorted book, it is the only plan we can come up with.
+
+## Plan Options
+
+We need to create some options for ourselves. What plans could we come up with if we sorted the phone book by the last name?
+
+- Thumb to about the 1/3rd of the phone book to get close to the J's
+- If we're before the J's scan forward, if we're past the J's scan backward
+- Once we find J scan for Jo, then scan for Jon, then Jone
+- Once we're at Jones we scan for Joe until we find him, and return his phone number
+
+We did a lot less work than reading the whole phone book.
+
+Our basic query to find a phone number is performing much better than before. We're going to keep the sorting.
+
+## Deletes & Updates
+
+How does our now sorted book affect our speed when updating or deleting records?
+
+```sql
+-- I'm Joe Jones. Please change my phone number to 555-555-5555.
+UPDATE phone_book
+SET phone_number = '555-555-5555'
+WHERE
+  firstname = 'joe'
+  AND lastname = 'jones'
 ```
 
-The book is not sorted. When we create new entries we stick them at the end of the last page.
+When we plan for this request we'll recognize we do the same thing as the 'Get Phone Number' request. We can seek to find 'Joe Jones' but rather than return the phone number we will change his phone number.
 
-### Requests
+Now for deleting.
 
-The most common request is – get a phone number for a given person's name. With an unsorted book we have to scan the phone book from the beginning until we find a name match.
-
-If they're on the first page, it's quick. If they're on the last page, it takes as long as reading the whole phone book. If they aren't in the phone book, we have to read the whole thing to verify that they are not there. We have poor performance. What can we do to improve?
-
-We can't read any faster but we could read fewer pages. So we sort the book's entries in alphabetical order by lastname, then by firstname. Now we can seek the sorted names to find the matching one. No more reading the whole phone book for lookups. We found a huge performance gain.
-
+```sql
+-- I'm Joe Jones. I'm moving away so please delete me from the phone book.
+DELETE FROM phone_book
+WHERE
+  firstname = 'joe'
+  AND lastname = 'jones'
 ```
+
+Once again we can do the seek to 'Joe Jones'. But now we delete him from the phone book. Both our update and delete statements where we can seek with names have gotten much better.
+
+## What Does The Index Look Like?
+
+Our index for sorting by lastname, then firstname would look like this.
+
+```sql
+CREATE INDEX IX_phone_book_lastname_firstname -- Name the index
+ON phone_book -- Put the index on the phone_book table
+(lastname, firstname) -- Sort by lastname, then by firstname
+INCLUDE (phone_number) -- Store the phone_number in the index but don't sort it
+```
+
+If we could query the whole index it would have this structure.
+
+```text
 | lastname | firstname | phone_number |
-| -------- | --------- | ------------ |
-| Aaberg   | ...       | 555-555-1234 |
+|----------|-----------|--------------|
+| Aaberg   | Aaron     | 555-555-1234 |
+| Aaberg   | Bob       | 555-555-1234 |
 | ...      | ...       | 555-555-2345 |
-| Baar     | ...       | 555-555-3456 |
-| ...      | ...       | 555-555-4567 |
-| Caamano  | ...       | 555-555-5678 |
 ```
 
-### Updates
+## Index Tradeoffs
 
-Before we sorted our book, updating was as painful as the lookups. We'd scan until we found the matching name, then change the phone number.
+Our `IX_phone_book_lastname_firstname` index has made our main queries for Find, Update and Delete requests a lot faster. But are there any queries that are actually made slower because of the index? Let's think about inserts.
 
-Now it's sorted and we can seek the correct name then do the update. No reading the whole phone book for updates anymore. That's lucky, the lastname sorting sped up our most common update and our most common query.
-
-### Deletes
-
-Another common request is – someone gives their name and asks to be removed from the phone book. Our sorted book makes this easier too. We can find people by name quickly, so we can find and delete them quickly.
-
-### Inserts
-
-People need to be added to the book. When our book was unsorted we simply added them to the end. Since it's sorted we need to determine the right place to put them. This is the first request that is harder than it used to be. It's not a lot harder, but it is harder.
-
-### Was the Sorting Worth It?
-
-Our most common queries, updates, and deletes got easier and faster. Only the insert got harder and slower. It was worth it for all the tasks we've described above. If these requests were the entirety of our job, sorting was a silver bullet.
-
-Real-world jobs (or apps) have more than four obvious tasks. Let's simulate that by adding some obscure requests to our job.
-
-### Other Use Cases
-
-Someone is doing a report and wants to know how many people in the area have the firstname Sam. Lastname, firstname sorting isn't any help here. We have to go back to reading the whole phone book, counting every time we see the firstname Sam. Can we speed up this query?
-
-If we sorted the book by firstname we could be quicker. We could seek to where Sam started and then stop counting when we saw the first non-Sam.
-
-```
-| firstname | lastname | phone_number |
-| --------- | -------- | ------------ |
-| Sal       | ...      | 555-555-1234 |
-| Sam       | ...      | 555-555-2345 |
-| Sam       | ...      | 555-555-3456 |
-| Sam       | ...      | 555-555-4567 |
-| Simon     | ...      | 555-555-5678 |
+```sql
+-- I'm new in town. My name is Joe Jones. My phone number is 555-555-5555
+INSERT INTO phone_book
+    (firstname, lastname, phone_number)
+VALUES
+    ('Joe', 'Jones', '555-555-5555')
 ```
 
-Did changing the sort order have a negative effect on the other queries? No, we can change our query plan to use firstname first and lastname second when we do our alphabetical seek. It's a different plan but it shouldn't change the speed or ease.
+This is the first query we've looked at that is actually harder **because** of the index. To understand why let's think about both plans.
 
-We've made the book more useful. It still supports our common queries and also this less common report query.
+### Pre-Index
 
-### Reporting Throws in a Wrench
+- Add Joe Jones to the last page of the phone book.
 
-Word has gotten around that we will answer all kinds of report questions. We're now asked lastname based queries. For example – how many people have the last name where the first two letters are JO. Can we accommodate these lastname requests?
+### Post-Index
 
-We could switch sorting back to lastname, firstname but that makes our firstname queries slow again. The book can't be sorted by both firstname, lastname and lastname, firstname at the same time. We have two query types that need different sorting to be efficient. But the book can only be sorted one way or the other.
+- Seek to where Joe Jones fits in sort order.
+- If there's no blank space on the page shuffle the other people onto previous or next pages to make room.
+- Add him to the right spot.
 
-### Multiple Books
+The 2nd step of this one is strange. If the pages of our phone book were airtight, leaving no room for extra inserts this would be an awful task. We'd have to shift everyone to the right on every insert. Let's not get too hung up on this right now. Let's say we found a good balance of leaving spaces in our phone book so that we rarely have to reshuffle.
 
-We can't have one physical book sorted in two different ways at once but we could have multiple books. We can copy the book and sort each copy differently. When a request comes in we can use the book that best fits the request.
+This is a much more complex issue in reality. You have to be careful in SQL to make sure you don't end up 'page shuffling' every time you insert a row. But we don't want to get hung up on it right now since it's more advanced. If you want to take a detour to understand it, check out [link] SQL Index Fill Factor and Page Shuffling.
 
-Now we've got a pretty quick response for various report requests coming in. Let's say we get up to five book copies all sorted differently that cover the variety of queries.
+Regardless of the possible page shuffling, the insert is harder now with the index. This is a pure tradeoff that we'll always face when indexing. Maintaining the index order has a cost.
 
-All requests that are read-only – not updating, deleting or inserting – are very efficient.
+## Making the Tradeoff
 
-### Trade-offs of Multiple Books
+In our case with the `IX_phone_book_lastname_firstname` the cost is well worth it. We avoid full phone book scans on our most common Find, Update and Delete statements. That is a huge gain compared to the cost of the seeking we do on our most common Insert.
 
-There are several downsides to having all these books. The obvious one is needing more shelf space – storage. That's not too bad though because storage is pretty cheap. But there's a more troublesome downside.
+Another tradeoff to note is the storage space required for our index. We'll talk a bit more about that when we get into multiple indexes. For now, we'll say the storage is also worth avoiding those full phone book table scans.
 
-What about requests that are not read-only, the updates, deletes and inserts? We have to keep all copies of the phone book current, so the task happens for each book. We also need to maintain the sorting in each. Any change request becomes slower and more difficult with each copy.
+## Other Queries
 
-Because we are just one person we can only do one task at a time. Basic lookup requests must wait until we finish updates to ensure accuracy. Depending on the number of update requests the queue can get very long. Quick, read-only requests are blocked and waiting. It doesn't matter if the actual task is efficient, total time includes wait time in the real world.
+So far our queries have only been about finding individual people. And they've all used firstname and lastname in the WHERE clauses. That is why they've all benefited so much from our index that sorts by name. We're dealing with the same "family" of queries.
 
-### Screeching to a Halt
+We're going to expand our understanding by looking at a new query, that doesn't fit in the "family" of queries so far. Consider this query.
 
-Our core use case of fetching, updating, adding and deleting is degraded. Querying the phone book has become slow for everyone. We got obsessed with indexing and now we've "optimized" ourselves into a bad place.
+```sql
+-- How many people in the phone book have the firstname Beau?
+SELECT COUNT(*)
+FROM phone_book
+WHERE
+  firstname = 'Beau'
+```
 
-So ends the analogy.
+Try to answer the following.
 
-## Real World Apps
+- Can this query use our lastname, firstname index? Why or why not.
+- Are there new indexes that would yield better plans for this query?
 
-The phone book example illustrates how many databases end up. I chose a reporting use case to derail things because it happens so often in real apps. An admin dashboard showing aggregate data has a very different query plan than the UI for end-users.
+Spoilers ahead. Make a guess at these before reading on.
 
-Sometimes there's an easy win. We saw that when we changed the lastname first sorting to firstnames first. It kept support for the core users and added support for report queries with no downside. But at some point, we optimized for reporting purposes that were at odds with our main purpose.
+--
 
-We need a sound approach to indexing. We want to determine the value of an index and understand its true cost. For now, the takeaway is there's no such thing as a "good" index in a vacuum. An index is only good or bad in the context of the whole application, including all DB queries.
+--
 
-<P>
-  <A to="/where-to-index">Next</A> we'll talk about a wholistic approach,
-  techniques to find index opportunities and how to balance tradeoffs.
-</P>
+--
+
+--
+
+--
+
+--
+
+### Can it use our lastname, firstname index?
+
+No. This is a key thing to know about indexes. The order of columns matter. Remember our index goes lastname, firstname. There is no way to seek all the firstnames with that index. Let's visualize that.
+
+```text
+| lastname | firstname | phone_number |
+|----------|-----------|--------------|
+| Aaberg   | Aaron     | 555-555-1233 |
+| Aaberg   | Beau      | 555-555-1234 |
+| ...      | ...       | 555-555-2346 |
+| ...      | ...       | 555-555-2347 |
+| Connor   | Beau      | 555-555-2348 |
+| ...      | ...       | 555-555-2349 |
+| Zelko    | Beau      | 555-555-2341 |
+```
+
+The last name sorting is no help. There could be a Beau on Aaberg or on Zelko. We have to start at the beginning and stop at the end. The index is not useful for the query.
+
+### Can We Make a Good Index for the Query?
+
+Yes. We can make another copy of our phone book that is perfectly suited to answer this query.
+
+```sql
+CREATE INDEX IX_phone_book_firstname -- Name the index
+ON phone_book -- Put the index on the phone_book table
+(firstname) -- Sort by firstname only
+-- Note: no included columns
+```
+
+Let's visualize the index.
+
+```text
+| firstname |
+|---------- |
+| ...       |
+| Aaron     |
+| Beau      |
+| Beau      |
+| ...       |
+| Beau      |
+| Bob       |
+| ...       |
+```
+
+Our plan becomes pretty clear.
+
+- Seek to our first Beau and start counting
+- Stop counting when we see any non-Beau
+
+Notice how we only have firstname. We left off lastname and phone_number because they are completely for that query. By leaving them off we save storage and can actually read the index faster. We can fit more firstnames on a page so we read fewer pages.
+
+## Summary
+
+- Good indexes create good plans for queries
+- Good plans execute quickly and can scale to more users
+- Indexes have tradeoffs
+  - Inserts and Updates must maintain index ordering
+  - Indexes cost storage because they copy the table data
+- We can have multiple indexes on a table to serve different queries
+
+The best way to get a knack for indexes is to practice. Write queries check the plans, then add/remove indexes and recheck to see what the SQL engine does. After some time you'll have a gut feel for what indexes are needed just by looking at a query.
+
+<A to="/where-to-index">
+  Next
+</A>, we'll talk about a holistic approach to indexing a real app. We'll look at techniques for finding hotspots that need tuning. We'll cover when indexes are not the right answer for performance. We'll look at some general guidelines for indexing.
