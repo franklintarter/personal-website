@@ -6,6 +6,8 @@ import { MeshText2D, textAlign } from "three-text2d";
 import { colors } from "../../constants";
 import AnimationRun from "../../animation-run";
 
+const labelGeometry = new THREE.PlaneBufferGeometry(1, 1);
+
 const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -293,17 +295,62 @@ export default class StableMatching extends AnimationRun {
   };
 
   createApplicant = ({ initialPosition, name }) => {
-    const textMesh = this.createTextMesh({ name });
+    // const textMesh = this.createTextMesh({ name });
+    const canvas = this.makeLabelCanvas(32, name);
+    const texture = new THREE.CanvasTexture(canvas);
+
+    texture.minFilter = THREE.LinearFilter;
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+
+    const labelMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+      transparent: true
+    });
+
+    const label = new THREE.Mesh(labelGeometry, labelMaterial);
+    label.position.z = 30;
+
+    console.log(label.position);
+
+    label.scale.x = canvas.width * 2;
+    label.scale.y = canvas.height * 2;
+
     // textMesh.position.x = -12;
     const containerMesh = this.createContainerMesh();
 
     const group = new THREE.Group();
-    group.add(textMesh);
+    group.add(label);
     group.add(containerMesh);
     group.position.y = this.calculateBoxPosition(initialPosition);
     group.position.z = this.DEFAULT_Z;
 
     return group;
+  };
+
+  makeLabelCanvas = (size, name) => {
+    const borderSize = 2;
+    const ctx = document.createElement("canvas").getContext("2d");
+    const font = `${size}px bold sans-serif`;
+    ctx.font = font;
+    // measure how long the name will be
+    const doubleBorderSize = borderSize * 2;
+    const width = ctx.measureText(name).width + doubleBorderSize;
+    const height = size + doubleBorderSize;
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
+
+    // need to set font again after resizing canvas
+    ctx.font = font;
+    ctx.textBaseline = "top";
+
+    ctx.fillStyle = "blue";
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "white";
+    ctx.fillText(name, borderSize, borderSize);
+
+    return ctx.canvas;
   };
 
   createJob = ({ initialPosition, job }) => {

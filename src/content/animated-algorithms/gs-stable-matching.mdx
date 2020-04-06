@@ -3,10 +3,13 @@ title: GS Stable Matching
 description: Bubble sort compares all adjacent values in an array from beginning to end. If compared values are out of order it swaps them. It repeats the process until it goes through the entire array without doing any swaps.
 runningTime: O(n^2)
 dataStructures:
-  - Array – Values
+  - Preference list for each applicant - ApplicantPref[a,i]
+  - Preference list for each job - JobPref[j,i]
+  - Linked list of available applicants
+  - Ranking array for each Job Ranking[j, i]
 keywords:
-  - Bubble Sort
-  - Sort
+  - GS
+  - Stable Matching
   - Algorithm
 ---
 
@@ -23,5 +26,3 @@ We can achieve stability by making sure each Applicant is matched with best Job 
 If a Job is desirable to two Applicants, the Job will prefer one Applicant over the other. The Job accepts the better Applicant, and the rejected Applicant must seek the next Job on their preference list.
 
 <AnimatedAlgorithm algorithmName="STABLE_MATCHING" />
-
-You won't find Bubble Sort used in libraries because it's so inefficient. Its only upside is the simplicity to write it. Because of its simplicity it is used to teach the basics of sorting.
