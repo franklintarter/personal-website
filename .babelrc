@@ -4,7 +4,15 @@
     [
       "prismjs",
       {
-        "languages": ["javascript", "css", "markup", "sql", "shell", "json"],
+        "languages": [
+          "javascript",
+          "css",
+          "markup",
+          "sql",
+          "shell",
+          "json",
+          "ruby"
+        ],
         "plugins": ["show-language"]
         // "css": true
       }

@@ -1,0 +1,209 @@
+---
+title: Pure, Testable Service Objects in Ruby/Rails
+description: Use dependency injection to write service objects that can have pure unit tests that don't hit the database.
+datePublished: 2020-04-12
+dateModified: 2020-04-12
+tags:
+  - Testing
+  - Rails
+  - Ruby
+keywords:
+  - Testing
+  - Rails
+  - Ruby
+  - Unit
+  - Software
+  - Development
+genre: software development
+---
+
+import { A } from "../../components/Typography";
+
+TL;DR
+Use dependency injection to write service objects that can have pure unit tests that don't hit the database.
+
+## The Problem
+
+Take a service object like this.
+
+```ruby
+# app/services/create_auth_token.rb
+
+class CreateAuthToken < AppService
+  def initialize(phone_number:)
+    @phone_number = phone_number
+  end
+
+  def call
+    person = Person.find_by phone_number: @phone_number
+
+    return ServiceResult.fail('Phone number not found') if person.nil?
+
+    person.create_auth_token
+    person.save
+
+    ServiceResult.succeed
+  end
+end
+```
+
+Let's think about what we need to test. There is one if statement resulting in two paths.
+
+- The phone number is found, an auth token is created, the service succeeds
+- The phone number is not found, the service fails
+
+Now let's think about how to test those two cases. It references `Person.find_by` and calls `person.save` on the model. Both of these create dependency on Active Record and will hit the database. To test this, we need to write an integration test.
+
+```ruby
+# spec/services/create_auth_token_spec.rb
+
+def create_person
+  # hitting DB here
+  Person.create(
+    display_name: 'Test',
+    email: SecureRandom.uuid + '@test.com',
+    phone_number: '555-555-5555'
+  )
+end
+
+RSpec.describe CreateAuthToken, 'call' do
+  it 'creates an auth token and succeeds when phone number found' do
+    person = create_person
+
+    # will hit DB twice in service call
+    result = CreateAuthToken.call(phone_number: person.phone_number)
+
+    expect(result.success?).to eq true
+    expect(person.auth_token).not_to eq nil
+  end
+
+  it 'fails when no phone number found' do
+    # will hit db once when it doesn't find the phone number
+    result = CreateAuthToken.call(phone_number: '555-123-1234')
+
+    expect(result.success?).to eq false
+  end
+end
+```
+
+This is an integration test, not a unit test. Testing the "found" and "not found" scenarios depends on the records in the database. We have to set that up ahead of time using `Person.create`.
+
+We could accept it and move on. We could leave the direct dependency on Active Record and live with the integration test. But we don't have to.
+
+## Solution - Dependency Injection
+
+To make this service unit-testable, we must remove the direct calls to Active Record. This is where dependency injection comes in. We'll add a new parameter to the service. It will be called `person_repo` abbreviated person repository. The person repository's job is to interact with the external persistence system. It needs to be able to do `find_by` and `save`.
+
+```ruby
+# app/services/create_auth_token.rb
+
+class CreateAuthToken < AppService
+  def initialize(phone_number:, person_repo: Person) # dependency injection
+    @phone_number = phone_number
+    @person_repo = person_repo
+  end
+
+  def call
+    person = @person_repo.find_by phone_number: @phone_number
+
+    return ServiceResult.fail('Phone number not found') if person.nil?
+
+    person.create_auth_token
+    @person_repo.save(person)
+
+    ServiceResult.succeed
+  end
+end
+```
+
+We're saying – this service will take a person_repo which could be `Person` from Active Record but it doesn't have to be. It could be anything.
+
+We'll default it to be `Person` for convenience. We could also use a factory or an IoC container but for our example, default is the simplest.
+
+There's one problem with our service. `Person` does not have a 'save' method. The instance of a person does, but we need to avoid calling that directly. We can fix that by adding a method to our `ApplicationRecord` class.
+
+```ruby
+# app/models/application_record.rb
+
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+
+  # extra method to allow AR to fulfill @person_repo dependency
+  def self.save(model)
+    model.save
+  end
+end
+```
+
+## Rewrite as Pure Unit Test
+
+We're ready to inject something different in our test to stop tests from hitting the database. Enter the mock.
+
+```ruby
+# spec/services/create_auth_token_spec.rb
+
+# note Person.new replaced Person.create, no DB call here
+def create_person
+  Person.new(
+    display_name: 'Test',
+    email: SecureRandom.uuid + '@test.com',
+    phone_number: '555-555-5555'
+  )
+end
+
+RSpec.describe CreateAuthToken, 'call' do
+  it 'creates an auth token' do
+    person = create_person
+
+    # set up mock to receive calls and return canned responses
+    mock = double(ApplicationRecord, find_by: person, save: true)
+
+    # make assertion that save ought to be called
+    expect(mock).to receive(:save)
+
+    result = CreateAuthToken.call(phone_number: person.phone_number, person_repo: mock)
+
+    expect(result.success?).to eq true
+    expect(person.auth_token).not_to eq nil
+  end
+
+  it 'returns failed result when no phone number found' do
+    # set up mock to return nil to hit the 'not found' scenario
+    mock = double(ApplicationRecord, find_by: nil)
+
+    result = CreateAuthToken.call(phone_number: '555-123-1234', person_repo: mock)
+
+    expect(result.success?).to eq false
+  end
+```
+
+These tests do not touch the database anymore. The mock simulates the found and not found scenario for us, rather than having to set it up. The test is faster and more focused on what the service actually does.
+
+## Disclaimer
+
+I'm new to Ruby and Rails. My backend experience is in Node and .Net. In .Net there's a huge emphasis on dependency injection. It's a first-class concern of the modern .Net frameworks. That background biases my approach to this problem.
+
+## Conclusion
+
+In my opinion, this feels pretty natural in Ruby/Rails. We'll see if this pattern works well when services get more complicated. The number of dependencies needs to stay under control. We can keep services very small and focused to avoid that.
+
+### Further Reading/Watching
+
+- <A
+    href="https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da"
+    target="_blank"
+  >
+    Fakes, Mocks and Stubs
+  </A>
+- <A href="https://www.youtube.com/watch?v=URSWYvyc42M" target="_blank">
+    Magic Tricks of Testing
+  </A>
+- <A
+    href="https://medium.com/@scottdomes/service-objects-in-rails-75ca74214b77"
+    target="_blank"
+  >
+    Rails Services
+  </A>
+- <A href="https://martinfowler.com/articles/injection.html" target="_blank">
+    Dependency Injection
+  </A>
