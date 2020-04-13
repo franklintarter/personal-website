@@ -156,15 +156,13 @@ RSpec.describe CreateAuthToken, 'call' do
     person = create_person
 
     # set up mock to receive calls and return canned responses
-    mock = double(ApplicationRecord, find_by: person, save: true)
-
-    # make assertion that save ought to be called
-    expect(mock).to receive(:save)
+    mock = double(Person, find_by: person, save: true)
 
     result = CreateAuthToken.call(phone_number: person.phone_number, person_repo: mock)
 
     expect(result.success?).to eq true
     expect(person.auth_token).not_to eq nil
+    expect(mock).to have_received(:save)
   end
 
   it 'returns failed result when no phone number found' do
