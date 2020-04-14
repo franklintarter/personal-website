@@ -45,6 +45,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@responsive {
+  @variants hover, focus {
+    .transform-scale-110 {
+      transform: scale(1.1);
+    }
+    .transform-scale-102 {
+      transform: scale(1.02);
+    }
+  }
+}
+
 /* Max Height to all wrappers */
 html,
 body,

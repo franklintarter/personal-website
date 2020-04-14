@@ -35,15 +35,15 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        path: `${__dirname}/src/img`,
-        name: "images"
+        path: `${__dirname}/src/content/img`,
+        name: "content-images"
       }
     },
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        path: `${__dirname}/src/content/img`,
-        name: "content-images"
+        path: `${__dirname}/src/img/ui`,
+        name: "images"
       }
     },
     "gatsby-plugin-sharp",

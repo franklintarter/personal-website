@@ -1,8 +1,11 @@
 module.exports = {
   theme: {
-    boxShadow: {
-      default: "-2px 2px 6px 0 rgba(0, 0, 0, .15)"
-    },
+    // boxShadow: {
+    //   default: "-2px 2px 6px 0 rgba(0, 0, 0, .15)"
+    // },
+    // scale: {
+    //   "110": 1.1
+    // },
     screens: {
       xs: "450px",
       sm: "640px",
@@ -30,7 +33,6 @@ module.exports = {
         "100": "25rem"
       }
     },
-    // TODO customize
     fontFamily: {
       sans: ["Nunito Sans", "sans-serif"],
       serif: ["Crimson Text", "serif"],
@@ -63,6 +65,9 @@ module.exports = {
           background: "F3F1FE",
           "box-shadow": "8px 8px 16px #d1cfda, -8px -8px 16px #ffffff;"
         }
+        // ".transform-scale-110": {
+        //   transform: "scale(1.1)"
+        // }
         // ".neo-glow": {
         //   "border-radius": "45px",
         //   background: "#F3F1FE",

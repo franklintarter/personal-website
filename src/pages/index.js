@@ -3,6 +3,7 @@ import { Link } from "gatsby";
 import { SEO, useSEO } from "gatsby-plugin-seo";
 import Layout from "../components/Layout";
 import { useArticles } from "../hooks";
+import ProjectPreview from "../components/UI/ProjectPreview";
 
 const ArticlePreview = ({ title, description, slug, tags }) => {
   const tagEls = tags.map(t => (
@@ -81,7 +82,18 @@ export default () => {
         </span>
       </h1>
       <div className="mt-16">
-        {/* <h2 className="text-xl text-gray-700 uppercase mb-1">Writing</h2> */}
+        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
+          ~ Projects ~
+        </h2>
+        <div>
+          <ProjectPreview name="Animated Sorting" />
+        </div>
+      </div>
+      <div className="mt-16">
+        {/* <h2 className="text-2xl text-brand-gray uppercase mb-4">Writing</h2> */}
+        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
+          ~ Writing ~
+        </h2>
         {articleEls}
       </div>
     </Layout>
