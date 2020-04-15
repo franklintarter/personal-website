@@ -1,11 +1,24 @@
 import React from "react";
 import { SEO, useSEO } from "gatsby-plugin-seo";
-import { graphql } from "gatsby";
+import { graphql, Link } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { MDXProvider } from "@mdx-js/react";
+import { useAnimatedSorting } from "../hooks";
 import { P, MdxComponentMap } from "../components/Typography";
 
 import Layout from "../components/Layout";
+
+const SortingLinks = ({ active }) => {
+  const sorts = useAnimatedSorting();
+
+  const sortEls = sorts.map(s => (
+    <Link to={s.slug} className="p-4">
+      {s.frontmatter.title}
+    </Link>
+  ));
+
+  return <div className="mt-8">{sortEls}</div>;
+};
 
 export default ({ data }) => {
   const { siteUrl } = useSEO();
@@ -28,11 +41,17 @@ export default ({ data }) => {
               "@type": "WebPage"
             }`}
       />{" "}
-      <h1 className="font-light leading-none tracking-wider">
+      <h1 className="font-light leading-none">
+        <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
+          Animated Sorting
+        </span>
+      </h1>
+      <SortingLinks />
+      {/* <h2 className="font-light leading-none tracking-wider">
         <span className="sm:text-5xl text-3xl font-serif text-brand-gray italic">
           {frontmatter.title}
         </span>
-      </h1>
+      </h2> */}
       <MDXProvider components={MdxComponentMap}>
         <MDXRenderer>{body}</MDXRenderer>
       </MDXProvider>

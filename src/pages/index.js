@@ -82,11 +82,15 @@ export default () => {
         </span>
       </h1>
       <div className="mt-16">
-        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
-          ~ Projects ~
-        </h2>
+        {/* <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
+          ~ Other ~
+        </h2> */}
         <div>
-          <ProjectPreview name="Animated Sorting" />
+          <ProjectPreview
+            url="/bubble-sort"
+            name="Animated Sorting"
+            imgName="animated-sorting.png"
+          />
         </div>
       </div>
       <div className="mt-16">

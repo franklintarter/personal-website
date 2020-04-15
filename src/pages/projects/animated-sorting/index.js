@@ -1,14 +1,14 @@
 import React from "react";
 import { SEO } from "gatsby-plugin-seo";
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 
 export default () => {
   return (
     <Layout>
       <SEO
-        title="Animated Algorithms"
-        description="Algorithms for the rest of us. Front end devs, full stack devs, or anyone else."
-        pagePath="/animated-algorithms"
+        title="Animated Sorting"
+        description="Visualize how sorting algorithms work. A quick reference for the rest of us."
+        pagePath="/projects/animated-sorting"
         schema={`{
               "@context": "http://schema.org",
               "@type": "WebPage"
@@ -16,7 +16,7 @@ export default () => {
       />{" "}
       <h1 className="font-light leading-none">
         <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
-          Animated Algorithms
+          Animated Sorting
         </span>
       </h1>
       <div>page init</div>

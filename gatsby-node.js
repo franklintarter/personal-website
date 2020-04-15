@@ -4,7 +4,7 @@ const { fmImagesToRelative } = require("gatsby-remark-relative-images");
 
 const articleTemplate = path.resolve(`src/templates/article.js`);
 const animatedAlgorithmTemplate = path.resolve(
-  `src/templates/animated-algorithm.js`
+  `src/templates/animated-sorting.js`
 );
 
 // exports.createPages = () => {};
@@ -50,8 +50,8 @@ exports.createPages = async ({ graphql, actions }) => {
   const aaResult = await graphql(
     `
       query articlesQuery {
-        animatedAlgorithms: allFile(
-          filter: { sourceInstanceName: { eq: "animated-algorithms" } }
+        animatedSorting: allFile(
+          filter: { sourceInstanceName: { eq: "animated-sorting" } }
         ) {
           nodes {
             name
@@ -62,7 +62,7 @@ exports.createPages = async ({ graphql, actions }) => {
     `
   );
 
-  aaResult.data.animatedAlgorithms.nodes.forEach(({ name, id }) => {
+  aaResult.data.animatedSorting.nodes.forEach(({ name, id }) => {
     createPage({
       path: name,
       component: animatedAlgorithmTemplate,
