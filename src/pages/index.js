@@ -82,6 +82,13 @@ export default () => {
         </span>
       </h1>
       <div className="mt-16">
+        {/* <h2 className="text-2xl text-brand-gray uppercase mb-4">Writing</h2> */}
+        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
+          ~ Writing ~
+        </h2>
+        {articleEls}
+      </div>
+      <div className="mt-16">
         {/* <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
           ~ Other ~
         </h2> */}
@@ -90,15 +97,14 @@ export default () => {
             url="/bubble-sort"
             name="Animated Sorting"
             imgName="animated-sorting.png"
+            className="mr-6"
+          />
+          <ProjectPreview
+            url="https://mortar-labs.com"
+            name="Mortar Labs"
+            imgName="ml-banner.png"
           />
         </div>
-      </div>
-      <div className="mt-16">
-        {/* <h2 className="text-2xl text-brand-gray uppercase mb-4">Writing</h2> */}
-        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
-          ~ Writing ~
-        </h2>
-        {articleEls}
       </div>
     </Layout>
   );
