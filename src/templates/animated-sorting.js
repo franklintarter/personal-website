@@ -11,13 +11,20 @@ import Layout from "../components/Layout";
 const SortingLinks = ({ active }) => {
   const sorts = useAnimatedSorting();
 
-  const sortEls = sorts.map(s => (
-    <Link to={s.slug} className="p-4">
-      {s.frontmatter.title}
-    </Link>
-  ));
+  const sortEls = sorts.map(s => {
+    let classes =
+      "transition hover:cursor-pointer hover:border-brand-gray p-4 pb-3 border-b-2 mr-2 border-gray-400 bold text-gray-800";
+    if (s.slug === `/${active}`) {
+      classes += " border-brand-gray";
+    }
+    return (
+      <Link to={s.slug} className={classes}>
+        {s.frontmatter.title}
+      </Link>
+    );
+  });
 
-  return <div className="mt-8">{sortEls}</div>;
+  return <div className="mt-6 mb-16">{sortEls}</div>;
 };
 
 export default ({ data }) => {
@@ -46,7 +53,7 @@ export default ({ data }) => {
           Animated Sorting
         </span>
       </h1>
-      <SortingLinks />
+      <SortingLinks active={name} />
       {/* <h2 className="font-light leading-none tracking-wider">
         <span className="sm:text-5xl text-3xl font-serif text-brand-gray italic">
           {frontmatter.title}
