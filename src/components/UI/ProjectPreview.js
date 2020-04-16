@@ -3,7 +3,7 @@ import Image from "gatsby-image";
 import { Link } from "gatsby";
 import { useImages } from "../../hooks";
 
-export default ({ name, imgName, url, className }) => {
+export default ({ name, imgName, url, className = "" }) => {
   const { fluid } = useImages().find(img => img.name === imgName);
 
   const children = () => (

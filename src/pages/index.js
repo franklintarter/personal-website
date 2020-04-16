@@ -1,38 +1,17 @@
 import React from "react";
-import { Link } from "gatsby";
 import { SEO, useSEO } from "gatsby-plugin-seo";
+import { Link } from "gatsby";
 import Layout from "../components/Layout";
 import { useArticles } from "../hooks";
 import ProjectPreview from "../components/UI/ProjectPreview";
-
-const ArticlePreview = ({ title, description, slug, tags }) => {
-  const tagEls = tags.map(t => (
-    <div
-      key={t}
-      className="transition hover:bg-brand-gray bg-brand-light-gray py-1 px-2 text-sm text-gray-100 mt-2 mb-1 mr-2 inline-block"
-    >
-      {t}
-    </div>
-  ));
-
-  return (
-    <Link to={slug}>
-      <div className="mb-6 pb-1 border-b-2 border-gray-200 hover:border-brand-light-gray transition">
-        <h3 className="text-3xl text-brand-gray font-serif leading-tight mb-2">
-          {title}
-        </h3>
-        <p className="text-gray-700">{description}</p>
-        {tagEls}
-      </div>
-    </Link>
-  );
-};
+import ArticlePreview from "../components/UI/ArticlePreview";
+import { A } from "../components/Typography";
 
 const pageTitle = "Home";
 
 export default () => {
   const { siteUrl } = useSEO();
-  const articles = useArticles();
+  const articles = useArticles().slice(0, 3);
 
   const articleEls = articles.map(article => (
     <ArticlePreview
@@ -83,10 +62,17 @@ export default () => {
       </h1>
       <div className="mt-16">
         {/* <h2 className="text-2xl text-brand-gray uppercase mb-4">Writing</h2> */}
-        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
+        {/* <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
           ~ Writing ~
-        </h2>
-        {articleEls}
+        </h2> */}
+        <div className="mb-8">{articleEls}</div>
+        <A
+          to="/writing"
+          className="text-lg py-4 text-gray-800"
+          // className="underline text-gray-800 hover:text-brand-faded"
+        >
+          More writing..
+        </A>
       </div>
       <div className="mt-16">
         {/* <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">

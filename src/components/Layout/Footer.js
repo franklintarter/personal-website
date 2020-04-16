@@ -9,7 +9,7 @@ import { useMetadata } from "../../hooks";
 export default () => {
   const { twitterUrl, linkedInUrl, githubUrl } = useMetadata();
   return (
-    <footer className="">
+    <footer className="mt-16">
       <Section>
         <div className="py-6">
           <div className="flex items-center mb-4 justify-center">
