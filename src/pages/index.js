@@ -70,11 +70,11 @@ export default () => {
         <div className="flex items-end">
           <A
             to="/writing"
-            className="text-lg py-4 text-gray-700 text-right ml-auto block flex align-center"
+            className="text-lg py-4 text-gray-700 hover:text-brand-gray text-right ml-auto block flex content-center"
             // className="underline text-gray-800 hover:text-brand-faded"
           >
-            <span className="mr-3">More writing</span>
-            <ChevronRight className="w-2 fill-current" />
+            <span className="mr-3 font-serif text-xl">More writing</span>
+            <ChevronRight className="w-2 mt-1 fill-current" />
           </A>
         </div>
       </div>

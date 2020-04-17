@@ -1,6 +1,7 @@
 import React from "react";
 import { SEO } from "gatsby-plugin-seo";
 import Layout from "../../components/Layout";
+import ProjectPreview from "../../components/UI/ProjectPreview";
 
 export default () => {
   return (
@@ -16,10 +17,24 @@ export default () => {
       />{" "}
       <h1 className="font-light leading-none">
         <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
-          Projects
+          Other Stuff
         </span>
       </h1>
-      <div>page init</div>
+      <div className="mt-8">
+        <div>
+          <ProjectPreview
+            url="/bubble-sort"
+            name="Animated Sorting"
+            imgName="animated-sorting.png"
+            className="mr-6"
+          />
+          <ProjectPreview
+            url="https://mortar-labs.com"
+            name="Mortar Labs"
+            imgName="ml-banner.png"
+          />
+        </div>
+      </div>{" "}
     </Layout>
   );
 };
