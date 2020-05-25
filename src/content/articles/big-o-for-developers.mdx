@@ -186,7 +186,7 @@ function findK(sortedArr, k)
 
 It only takes 20 times through this loop to find K from an array of a million. 30 times through and we could find K in a billion. That is very efficient.
 
-When thinking of _O(log n)_ think of binary search. Think of cutting a dataset in half like the 20 questions game.
+When thinking of _O(log n)_ think of binary search. Think of cutting a data set in half like the 20 questions game.
 
 _O(log n)_ is the inverse of _O(n^2)_. In _O(log n)_ time the data set could be enormous and the algorithm can still run in a reasonable time. In _O(n^2)_, the running time becomes unmanageable when the data set becomes large.
 
@@ -249,7 +249,7 @@ function merge(left, right) {
 
 Disclaimer – We're going to stick to a simplified explanation here. There are [algebraic](https://www.youtube.com/watch?v=LPfHV3xWwXg) ways to prove this is _O(n log n)._ There are also [recursion tree drawings](https://courses.csail.mit.edu/6.006/spring11/rec/rec08.pdf) to help visualize and prove it. Those are too in-depth for this article.
 
-For our purposes this is a divide and conquer algorithm. Divide (split) is _O(log n)_. Conquer (merge) is _O(n)_. Divide and conquer is a useful simplification for this level of overview. Not all divide and conquer algorithms are _O(n log n)_ but when the conquer step is _O(n)_ you can be pretty sure the whole algorithm is _O(n log n)._
+Divide and conquer is a useful simplification for this level of overview. Divide (split) is _O(log n)_. Conquer (merge) is _O(n)_. Not all divide and conquer algorithms are _O(n log n)_ but when the conquer step is _O(n)_ you can be pretty sure the whole algorithm is _O(n log n)._
 
 ### Exponential & Factorial Time
 
