@@ -145,15 +145,15 @@ Big-O for logarithmic time is written like this:
 
 > _O(log n)_
 
-Logarithmic time is faster than n time. That may seem weird at first to think that something can be faster than n. But if we visualize an example it's clearly possible and it's very important.
+_O(log n)_ is faster than _O(n)_. That may seem weird at first to think that something can be faster than _O(log n)_. But if we visualize an example it's clearly possible and it's very important.
 
 In the game 20 questions, one person in a group thinks of something. It could be absolutely anything. Any person, place, or thing. The group can only ask 20 yes or no questions to find the exact thing the person is thinking.
 
-Without a logarithmic way to whittle down the data set, it would be impossible. If the "asking questions algorithm" was _O(n)_ you would have a 20 in n chance of winning, where n is all the data in the person's brain. But since asking questions is like _O(log n)_ it's pretty easy to win.
+Without a logarithmic way to drill down the data set, it would be almost impossible for the guessers to win. If the "asking questions algorithm" was _O(n)_ you would have a 20 in n chance, where n is all the data in the person's brain. But if you ask good questions it is like _O(log n)_. Then it's pretty easy to win.
 
 Are you thinking of a person? Yes. Is the person fictional? No. Is the person alive? Yes. Is the person famous? Yes. With those four questions, the data set went from the person's entire brain, down to 5,000ish possible famous, living, non-fictional people, they'd be able to think of. That ability to quickly narrow down a brain-full of information has huge implications.
 
-It's better to ask questions that will roughly cut the data set in half. When writing code you can always cut the list in half until you get to a single item.
+The best questions will roughly cut the data set in half. In code you can always cut the data set in half. Then repeat until you get to a single item.
 
 Here's the 20 questions game in code, except it's really boring because it's sorted numbers instead of a person's brain. But it's very efficient.
 
