@@ -15,23 +15,28 @@ export default () => {
               "@type": "WebPage"
             }`}
       />{" "}
-      <h1 className="font-light leading-none">
+      <h1 className="font-light leading-none invisible xs:visible">
         <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
-          Other Stuff
+          Projects
         </span>
       </h1>
-      <div className="mt-8">
-        <div>
+      <div className="xs:mt-8">
+        <div className="flex flex-wrap justify-center xs:justify-start">
           <ProjectPreview
             url="/bubble-sort"
             name="Animated Sorting"
             imgName="animated-sorting.png"
-            className="mr-6"
+            className="xs:mr-6 xs:mb-0 mb-8"
           />
           <ProjectPreview
             url="https://mortar-labs.com"
             name="Mortar Labs"
             imgName="ml-banner.png"
+          />
+          <ProjectPreview
+            url="https://github.com/franklintarter/nodejs-cube"
+            name="Console Cube"
+            imgName="cube.png"
           />
         </div>
       </div>{" "}

@@ -63,9 +63,12 @@ export default () => {
       </h1>
       <div className="mt-16">
         {/* <h2 className="text-2xl text-brand-gray uppercase mb-4">Writing</h2> */}
-        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
-          ~ Writing ~
+        <h2 className="text-lg uppercase text-brand-gray font-sans mb-3 font-light tracking-wider">
+          Writing
         </h2>
+        {/* <h2 className="text-sm uppercase text-gray-700 font-serif mb-3 font-light">
+          ~ Writing ~
+        </h2> */}
         <div className="mb-4">{articleEls}</div>
         <div className="flex items-end">
           <A
@@ -73,26 +76,34 @@ export default () => {
             className="text-lg py-4 text-gray-700 hover:text-brand-gray text-right ml-auto block flex content-center"
             // className="underline text-gray-800 hover:text-brand-faded"
           >
-            <span className="mr-3 font-serif text-xl">More writing</span>
+            <span className="text-md gray font-sans mt-1 mr-3 font-light tracking-wider">
+              More writing
+            </span>
             <ChevronRight className="w-2 mt-1 fill-current" />
           </A>
         </div>
       </div>
       <div className="mt-16">
-        <h2 className="text-lg uppercase text-brand-gray font-serif mb-3 font-light">
-          ~ Other ~
+        <h2 className="text-lg uppercase text-brand-gray font-sans mb-5 font-light tracking-wider">
+          Projects
         </h2>
         <div>
           <ProjectPreview
             url="/bubble-sort"
             name="Animated Sorting"
             imgName="animated-sorting.png"
-            className="mr-6"
+            className="mr-6 mb-8"
           />
           <ProjectPreview
             url="https://mortar-labs.com"
             name="Mortar Labs"
             imgName="ml-banner.png"
+            className="mr-6 mb-8"
+          />
+          <ProjectPreview
+            url="https://github.com/franklintarter/nodejs-cube"
+            name="Console Cube"
+            imgName="cube.png"
           />
         </div>
       </div>

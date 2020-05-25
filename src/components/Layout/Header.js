@@ -29,12 +29,15 @@ export default () => {
             </div>
           </Link>
         </div>
-        {/* <div className="flex justify-center xs:flex-grow-0 flex-grow">
-          <NavLink className="mr-4" to="/projects">
-            Projects
+        <div className="flex justify-center xs:flex-grow-0 flex-grow xs:mt-0 mt-6">
+          <NavLink to="/" className="mr-4">
+            Home
           </NavLink>
-          <NavLink to="/writing">Writing</NavLink>
-        </div> */}
+          <NavLink className="mr-4" to="/writing">
+            Writing
+          </NavLink>
+          <NavLink to="/projects">Projects</NavLink>
+        </div>
       </div>
     </nav>
   );

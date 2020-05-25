@@ -26,12 +26,12 @@ export default () => {
               "@type": "WebPage"
             }`}
       />{" "}
-      <h1 className="font-light leading-none">
+      <h1 className="font-light leading-none invisible xs:visible">
         <span className="text-xl sm:text-5xl xs:text-3xl font-serif text-brand-gray italic">
           Writing
         </span>
       </h1>
-      <div className="mt-8">{articleEls}</div>
+      <div className="xs:mt-8">{articleEls}</div>
     </Layout>
   );
 };
