@@ -73,7 +73,7 @@
     "react-helmet": "^5.2.1",
     "tailwindcss": "^1.1.2",
     "tailwindcss-overload": "^0.0.3",
-    "three": "^0.113.2",
+    "three": "^0.125.0",
     "three-text2d": "^0.6.0",
     "typeface-crimson-text": "^0.0.72",
     "typeface-nunito-sans": "^0.0.72",
