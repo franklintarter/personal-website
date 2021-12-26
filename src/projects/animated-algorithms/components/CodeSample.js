@@ -18,7 +18,6 @@ export default ({ codeLines, stepName }) => {
     if (lines !== "") {
       Prism.highlightAll();
       LineHighlight();
-      console.log("eff");
     }
   });
   return (

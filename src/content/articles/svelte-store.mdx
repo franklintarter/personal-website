@@ -1,0 +1,388 @@
+---
+title: State Management in Svelte
+description: A look at state management in a Svelte application.
+datePublished: 2021-12-26
+dateModified: 2021-12-26
+tags:
+  - Svelte
+  - State Management
+  - Front End
+keywords:
+  - Svelte
+  - Observables
+  - Store
+genre: software development
+---
+
+### TL;DR
+
+State management in Svelte is pure joy. [See the source code of the example app](https://github.com/franklintarter/svelte-store-example).
+
+## The Next Chapter of State
+
+In React-land, the “right” way to do “state” has been elusive. The patterns and libraries have come and gone like fashion trends. Each iteration brings important ideas and critiques of the older way. But often they bring their own mistakes and jargon that make it unnecessarily hard to learn. Looking at you, Redux.
+
+We can take the best ideas from React and use Svelte’s simple tools to build a readable yet scalable state management system.
+
+## State Management Simplified
+
+This state management system will be bulit with four concepts.
+
+- State – observable data that our components and application will reference.
+- State Changers – functions that change state. AKA mutations.
+- Actions – functions that call services (like APIs) and State Changers.
+- State Views – functions that compute or format state differently. These are not required but are useful for keeping logic out of components. AKA getters (Vuex), selectors (Redux).
+
+We’ll see how these work as we build two different "stores" in an e-commerce app. One for products and one for the cart. The finished example app is in the iframe below. The source code can be found [here](https://github.com/franklintarter/svelte-store-example)
+
+<br />
+<iframe
+  src="https://loving-knuth-8f29de.netlify.app/"
+  style="width: 100%; height: 450px;"
+  class="shadow-md"
+></iframe>
+
+## Our Products Store
+
+First, we’ll define the state.
+
+```js
+import { writable } from "svelte/store";
+
+// State
+export const products = writable([]);
+export const productsLoading = writable(false);
+export const productsError = writable(null);
+```
+
+The `writable` function is a simple but powerful part of Svelte’s tooling that allows us to create our observable state. We pass in our initial state to `writable` and get back the observable. For the products part of our app, we have three pieces of state – the list products, the loading boolean, and the error message/code. These are all initialized to sensible defaults.
+
+### State Changers
+
+Next, the functions that change our state. In what ways does our state transition? We’ll start with a few that we know we’ll need. These can go in the same file right below our state.
+
+```js
+// State Changers
+const requestProducts = () => {
+  productsLoading.set(true);
+};
+
+const receiveProductsSuccess = (data) => {
+  productsLoading.set(false);
+  products.set(data);
+};
+
+const receiveProductsError = (error) => {
+  productsLoading.set(false);
+  productsError.set(error);
+};
+```
+
+These (and later the actions) are named with the [Gitlab Vuex naming patterns](https://docs.gitlab.com/ee/development/fe_guide/vuex.html#naming-pattern-request-and-receive-namespaces) in mind.
+
+The only responsibility of these functions is to set new values on the state. They are not exported because they will not be called directly by components, they will only be called by actions as we’ll see.
+
+### Actions
+
+Actions will be called from outside the store. Triggered by user events like button clicks or app events like initialization.
+
+```js
+import { apiGetProducts } from '../mock-api';
+
+...
+
+// Actions
+export const fetchProducts = () => {
+  requestProducts();
+  apiGetProducts()
+    .then((data) => receiveProductsSuccess(data))
+    .catch((error) => receiveProductsError(error));
+};
+```
+
+For our actions, we’ll import a `apiGetProducts` from a mock API file. We’ll see how that works later, but it doesn’t actually matter what goes on in our fake API or a real API, our action is agnostic of that.
+
+The `fetchProduct` action first calls a State Changer `requestProducts` which as we saw above sets loading to `true`. Then it calls the service `apiGetProducts`, awaits for the response and calls the `receiveProductsSuccess` State Changer on success, or the `receiveProductsError` State Changer on error.
+
+This is a typical pattern of an action.
+
+- Call an State Changer
+- Call a service
+- If service call successful, call an “on success” State Changer
+- if service call unsuccessful, call an “on failure” State Changer
+
+### State Views
+
+These may not be needed but are good practice to keep complex data transformations out of components. These never change state or call State Changers, they just show the state in a different format or do some computations/aggregations of the current state.
+
+For this State View example we convert an array into a key-value map to make it easier to access products in some situations.
+
+```js
+import { writable, derived } from 'svelte/store';
+
+...
+
+// State Views
+export const productsMap = derived(products, ($products) =>
+  $products.reduce((map, product) => {
+    map[product.sku] = product;
+    return map;
+  }, {})
+);
+```
+
+The `derived` function from the `svelte/store` takes a store as the first param, and the transformation function as the second.
+
+### Full Products Store
+
+Our products store looks like this. Everything in one file.
+
+```js
+import { apiGetProducts } from "../mock-api";
+import { writable, derived } from "svelte/store";
+
+// State
+export const products = writable([]);
+export const productsLoading = writable(false);
+export const productsError = writable(null);
+
+// State Changers
+const requestProducts = () => {
+  productsLoading.set(true);
+};
+
+const receiveProductsSuccess = (data) => {
+  productsLoading.set(false);
+  products.set(data);
+};
+
+const receiveProductsError = (error) => {
+  productsLoading.set(false);
+  productsError.set(error);
+};
+
+// Actions
+export const fetchProducts = () => {
+  requestProducts();
+  apiGetProducts()
+    .then((data) => receiveProductsSuccess(data))
+    .catch((error) => receiveProductsError(error));
+};
+
+// State Views
+export const productsMap = derived(products, ($products) =>
+  $products.reduce((map, product) => {
+    map[product.sku] = product;
+    return map;
+  }, {})
+);
+```
+
+## Cart Store
+
+We’ll have one other store file to handle the cart functionality of this app. It’s a bit more involved because there are a few more actions to deal with adding and removing items from the cart. It also references the State View from the products store.
+
+```js
+import { writable, derived } from "svelte/store";
+import { apiAddToCart, apiRemoveFromCart } from "../mock-api";
+import { productsMap } from "./products";
+
+// State
+export const cartItems = writable([]);
+export const cartLoading = writable(false);
+export const cartError = writable(null);
+
+// State Changers
+const updateCart = () => {
+  cartLoading.set(true);
+};
+
+const updateCartSuccess = (nextCartItems) => {
+  cartLoading.set(false);
+  cartItems.set(nextCartItems);
+};
+
+const updateCartError = (error) => {
+  cartLoading.set(false);
+  cartError.set(error);
+};
+
+// State Views
+export const cartItemsWithProducts = derived(
+  [productsMap, cartItems],
+  ([$productsMap, $cartItems]) => {
+    return $cartItems.map((item) => {
+      const product = $productsMap[item.sku];
+      return {
+        ...product,
+        quantity: item.quantity,
+        price: product.price * item.quantity,
+      };
+    });
+  }
+);
+
+export const cartItemsCount = derived(cartItems, ($itemsInCart) =>
+  $itemsInCart.reduce((count, item) => count + item.quantity, 0)
+);
+
+export const subtotal = derived(
+  cartItemsWithProducts,
+  ($cartItemsWithProducts) =>
+    $cartItemsWithProducts.reduce((total, item) => total + item.price, 0)
+);
+
+// Actions
+export const addToCart = (sku) => {
+  updateCart();
+  apiAddToCart(sku)
+    .then((data) => updateCartSuccess(data))
+    .catch((error) => updateCartError(error));
+};
+
+export const removeFromCart = (sku) => {
+  updateCart();
+  apiRemoveFromCart(sku)
+    .then((data) => updateCartSuccess(data))
+    .catch((error) => updateCartError(error));
+};
+```
+
+## Usage in Svelte Components
+
+This is the most involved component in the example app, the Cart. It imports some State Views and Actions and wires them up to the markup. While there's a fair amount of markup here the Svelte component is blissfully unaware of the internals of the state management in our app.
+
+```js
+<script>
+  import currency from '$lib/currency';
+  import { fade } from 'svelte/transition';
+  import { Jumper } from 'svelte-loading-spinners';
+  import CartItem from './CartItem.svelte';
+  import {
+    cartItemsCount,
+    removeFromCart,
+    cartItemsWithProducts,
+    subtotal,
+    cartLoading
+  } from '../store/cart';
+  $: cartIsEmpty = $cartItemsCount === 0;
+</script>
+
+<div class="shadow mt-12 relative">
+  {#if $cartLoading}
+    <div
+      transition:fade={{ duration: 200 }}
+      class="absolute h-full w-full flex items-center justify-center bg-white opacity-60 z-10"
+    >
+    <Jumper size="60" color="#FF3E00" unit="px" duration="1s" />
+    </div>
+  {/if}
+  <div class="p-3">
+    <h2 class="text-2xl text-red-700">Cart</h2>
+  </div>
+  <div>
+    {#if cartIsEmpty}
+      <p class="p-3 pt-0 text-gray-700 text-xl">Your cart is empty.</p>
+    {:else}
+      <div>
+        {#each $cartItemsWithProducts as item}
+          <CartItem
+            quantity={item.quantity}
+            name={item.name}
+            price={item.price}
+            removeFromCart={() => removeFromCart(item.sku)}
+          />
+        {/each}
+        <div class="mt-2 border-t pt-3 pb-3 px-3">
+          <div class="flex items-baseline justify-between">
+            <h3 class="text-gray-600 text-md">Subtotal</h3>
+            <p class="text-gray-700 text-xl">{currency($subtotal)}</p>
+          </div>
+          <button
+            type="button"
+            class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Proceed To Checkout
+          </button>
+        </div>
+      </div>
+    {/if}
+  </div>
+</div>
+```
+
+## Mock API
+
+The mock API is not really part of the whole store thing, but I think it’s a valuable pattern to get things going and make the front end app completely functional/testable without having to build a backend. Since this is all fake we just have these fake functions return a promise with a timeout and some bare-bones logic that returns the data needed for the Actions.
+
+```js
+import { cartItems } from "../store/cart";
+import { get } from "svelte/store";
+
+export const apiAddToCart = (sku) =>
+  withDelayedPromise(() => {
+    let needToAdd = true;
+    const nextItems = get(cartItems).map((item) => {
+      if (item.sku === sku) {
+        needToAdd = false;
+        return { ...item, quantity: item.quantity + 1 };
+      } else {
+        return { ...item };
+      }
+    });
+
+    if (needToAdd) {
+      nextItems.push({ quantity: 1, sku });
+    }
+
+    return nextItems;
+  });
+
+export const apiRemoveFromCart = (sku) =>
+  withDelayedPromise(() => get(cartItems).filter((item) => item.sku !== sku));
+
+export const apiGetProducts = () =>
+  withDelayedPromise(() => [
+    {
+      sku: "SHIRT-1",
+      name: "Red Striped Shirt",
+      price: 29.99,
+      image: "/mrushad-khombhadia-GlgDs6_WhTg-unsplash.jpg",
+    },
+    {
+      sku: "SHOES-1",
+      name: "Colorful Shoes",
+      price: 59.99,
+      image: "/irene-kredenets-dwKiHoqqxk8-unsplash.jpg",
+    },
+    {
+      sku: "SHOES-2",
+      name: "Red Shoes",
+      price: 109.99,
+      image: "/paul-gaudriault-a-QH9MAAVNI-unsplash.jpg",
+    },
+  ]);
+
+const withDelayedPromise = (action) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const result = action();
+      resolve(result);
+    }, 1100);
+  });
+};
+```
+
+## Summary
+
+Our state management has four pieces – Observable State, State Changers, Actions and State Views. We used Svelte’s `writable` to create the Observable State and the State Changers. We used Svelte’s `derived` to create State Views. And we created Actions which called the State Changers and a Mock API.
+
+## Going Deeper Into Svelte
+
+Svelte’s developer experience (DX) is at the top of the class but it’s a bit of a Trojan Horse, it’s not the real story of Svelte. This article is really only focused on one small aspect of the great DX that Svelte offers. I recommend watching [Rich Harris’s talk](https://www.youtube.com/watch?v=AdNJ3fydeao) to get the full picture of how Svelte is more than just great DX, libs, and sugar syntax.
+
+### Resources
+
+- [Source code for this app](https://github.com/franklintarter/svelte-store-example)
+- [Gitlab’s Vuex naming scheme](https://docs.gitlab.com/ee/development/fe_guide/vuex.html#naming-pattern-request-and-receive-namespaces)
+- [Rich Harris’s – Rethinking Reactivity](https://www.youtube.com/watch?v=AdNJ3fydeao)
