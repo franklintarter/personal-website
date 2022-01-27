@@ -16529,10 +16529,10 @@ three-text2d@^0.6.0:
   resolved "https://registry.yarnpkg.com/three-text2d/-/three-text2d-0.6.0.tgz#ba769b3af40eb8561155c86f869beb8f72332345"
   integrity sha512-u0Lj+qfV63UPNmS+QaMkxZ1+ZjRgdKsoxs9Pli9xX7d2x8k2cUP7tCGomEgAc0pxqfm7PV0zZP5tFU37n4Vibw==
 
-three@^0.113.2:
-  version "0.113.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.113.2.tgz#04791d491fe4359330f9dbe7b767db18bfb35d67"
-  integrity sha512-x3vrKW41/UtbWbWduWKGlfIc043SvHWr3YltehYq+UGb9YglQ2oztNGvl2eut05JtNSmP11Mh3t6Xak5/0e+Fg==
+three@^0.137.0:
+  version "0.137.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.137.0.tgz#0ebd6ba66637a332c31f234bcdd35aeec071a6e3"
+  integrity sha512-rzSDhia6cU35UCy6y+zEEws6vSgytfHqFMSaBvUcySgzwvDO6vETyswtSNi/+aVqJw8WLMwyT1mlQQ1T/dxxOA==
 
 throttleit@^1.0.0:
   version "1.0.0"
